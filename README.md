@@ -1,24 +1,214 @@
 # @naoya-tatetsu/aho-corasick
 
-TypeScript 7で実装した、実行時依存ゼロのAho–Corasick文字列検索ライブラリです。複数パターンを一度構築し、異なるテキストに繰り返し適用できます。
+TypeScript 7で実装した、実行時依存ゼロのAho–Corasick文字列検索ライブラリです。複数のキーワードを一度登録すれば、テキスト1回の走査で全キーワードの出現位置をまとめて取得できます。キーワードが何件あっても走査コストはほぼ変わりません。
+
+## インストール
+
+```sh
+pnpm add @naoya-tatetsu/aho-corasick
+# npm install @naoya-tatetsu/aho-corasick
+# yarn add @naoya-tatetsu/aho-corasick
+```
+
+Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.12以降の`require(ESM)`からも読み込めます（古いNode向けのCJSビルドは含みません）。実行時依存はゼロで、Node固有のAPIも使っていないため、ブラウザのESMとしても利用できます（ブラウザでの性能検証は未実施です）。
+
+## 使い方
+
+### 基本
+
+辞書を一度構築し、異なるテキストに何度でも適用します。
 
 ```ts
 import { AhoCorasick } from '@naoya-tatetsu/aho-corasick';
 
 const matcher = new AhoCorasick(['he', 'she', 'hers']);
+
 matcher.findAll('ushers');
 // [
-//   { patternIndex: 1, start: 1, end: 4 },
-//   { patternIndex: 0, start: 2, end: 4 },
-//   { patternIndex: 2, start: 2, end: 6 },
+//   { patternIndex: 1, start: 1, end: 4 },  // she
+//   { patternIndex: 0, start: 2, end: 4 },  // he
+//   { patternIndex: 2, start: 2, end: 6 },  // hers
 // ]
-matcher.count('ushers'); // 3。結果オブジェクトを生成しない
-matcher.test('ushers');  // true。最初の一致で終了
-matcher.forEach('ushers', (patternIndex, start, end) => {
-  console.log(patternIndex, start, end);
-  // falseを返すと検索を終了
+
+matcher.findAll('this here');
+// [{ patternIndex: 0, start: 5, end: 7 }]
+```
+
+`patternIndex`はコンストラクタに渡した配列の添字、`start`と`end`は`String.slice`と同じUTF-16コード単位の位置（`end`は排他的）です。重なった一致も取りこぼしません。上の例では`she`・`he`・`hers`が同じ位置で重なっていますが3件すべて返ります。
+
+**構築にはコストがかかるため、インスタンスは使い回してください。** 辞書が固定ならモジュールのトップレベルで一度作るのが基本です。
+
+```ts
+// ng-words.ts
+export const ngWords = new AhoCorasick(['詐欺', '当選', '無料']);
+```
+
+`Iterable<string>`を受け取るので`Set`もそのまま渡せます。
+
+```ts
+new AhoCorasick(new Set(['ab', 'bc'])).count('abc'); // 2
+```
+
+### どのAPIを使うか
+
+必要な情報だけを取るAPIを選ぶと、無駄な処理と割り当てを避けられます。
+
+| 知りたいこと | API |
+| --- | --- |
+| 含まれるかどうかだけ | `test` — 最初の一致で即座に終了 |
+| 件数だけ | `count` — 結果オブジェクトを一切作らない |
+| 全一致を順に処理したい | `forEach` — 結果配列を作らずコールバックで通知 |
+| 全一致を配列で受け取りたい | `findAll` — 扱いやすいが一致1件ごとにオブジェクトを生成 |
+
+```ts
+const ng = new AhoCorasick(['詐欺', '当選', '無料']);
+
+ng.test('無料キャンペーンに当選しました');  // true
+ng.test('通常のお知らせ');                   // false
+ng.count('無料無料');                        // 2（重なりと重複も数える）
+```
+
+一致が密なテキストでは`findAll`の割り当てが支配的になります。全件を1回ずつ処理するだけなら`forEach`のほうが速く、メモリも使いません。
+
+### 一致箇所を取り出す
+
+`patternIndex`から元のキーワードを引き、`slice`で該当箇所を取り出します。
+
+```ts
+const text = '無料キャンペーンに当選しました';
+
+for (const { patternIndex, start, end } of ng.findAll(text)) {
+  console.log(ng.patterns[patternIndex], text.slice(start, end), start, end);
+}
+// 無料 無料 0 2
+// 当選 当選 9 11
+```
+
+`patterns`は入力をコピーした読み取り専用の配列です。
+
+### 重なりを解消する
+
+`findAll`は重なった一致をすべて返すので、ハイライトや置換に使うには重なりのない集合へ絞る必要があります。**結果は終了位置の昇順で届くため、素直に前から貪欲に選ぶと短いキーワードが優先されてしまいます。**
+
+```ts
+const kw = new AhoCorasick(['東京', '東京大学', '大学']);
+const src = '東京大学と東京の大学';
+
+// 素直な貪欲法は「東京」を先に取ってしまう
+// -> 東京, 大学, 東京, 大学
+```
+
+左から最長を優先する（leftmost-longest）には、開始位置の昇順・長さの降順に並べ替えてから選びます。
+
+```ts
+function leftmostLongest(ac: AhoCorasick, text: string) {
+  const all = ac.findAll(text);
+  all.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
+  const picked = [];
+  let lastEnd = 0;
+  for (const m of all) {
+    if (m.start >= lastEnd) {
+      picked.push(m);
+      lastEnd = m.end;
+    }
+  }
+  return picked;
+}
+
+leftmostLongest(kw, src);
+// 東京大学@0, 東京@5, 大学@8
+```
+
+これを使えばマスクやハイライトが素直に書けます。
+
+```ts
+function replaceMatches(ac: AhoCorasick, text: string, wrap: (hit: string) => string) {
+  let out = '';
+  let cursor = 0;
+  for (const m of leftmostLongest(ac, text)) {
+    out += text.slice(cursor, m.start) + wrap(text.slice(m.start, m.end));
+    cursor = m.end;
+  }
+  return out + text.slice(cursor);
+}
+
+replaceMatches(kw, src, hit => `<mark>${hit}</mark>`);
+// <mark>東京大学</mark>と<mark>東京</mark>の<mark>大学</mark>
+
+const ng2 = new AhoCorasick(['詐欺', '無料', '無料ギフト']);
+replaceMatches(ng2, '無料ギフトの案内、詐欺に注意', hit => '＊'.repeat(hit.length));
+// ＊＊＊＊＊の案内、＊＊に注意
+```
+
+### パターンごとに集計する
+
+`forEach`なら結果配列を作らずに集計できます。
+
+```ts
+const tally = new Array(ng.patterns.length).fill(0);
+ng.forEach('無料無料と当選', patternIndex => { tally[patternIndex]++; });
+// [0, 1, 2]  // 詐欺=0, 当選=1, 無料=2
+```
+
+### 途中で打ち切る
+
+コールバックが厳密に`false`を返すと、その時点で走査を終了します。最初のN件だけ欲しい場合に、テキスト全体を走査せずに済みます。
+
+```ts
+import type { Match } from '@naoya-tatetsu/aho-corasick';
+
+const found: Match[] = [];
+ng.forEach('無料で当選、詐欺に注意', (patternIndex, start, end) => {
+  found.push({ patternIndex, start, end });
+  if (found.length === 2) return false;   // ここで打ち切る
 });
 ```
+
+### 大文字小文字を無視する
+
+大文字小文字は区別します。無視したい場合は、辞書とテキストの両方を同じ方法で正規化してください。
+
+```ts
+const ci = new AhoCorasick(['error', 'warning'].map(p => p.toLowerCase()));
+ci.test('Fatal ERROR occurred'.toLowerCase());  // true
+```
+
+ただし返る位置は正規化後の文字列に対するものです。ASCIIや日本語では`toLowerCase()`が長さを変えないので元のテキストにもそのまま使えますが、一部のUnicode文字は長さが変わるため（`'İ'.toLowerCase().length === 2`）オフセットがずれます。元テキストの位置が必要でUnicode全般を扱うなら、正規化後の文字列を保持して`slice`してください。
+
+### 遷移表のメモリを制限する
+
+既定では64 MiBまで遷移表を確保します。上限を下げたい場合は`maxDenseBytes`を渡します。超える辞書では省メモリな疎な表現へ自動的に切り替わります。詳細は[実装とメモリ](#実装とメモリ)を参照してください。
+
+```ts
+const tuned = new AhoCorasick(['東京', '京都'], { maxDenseBytes: 8 * 1024 * 1024 });
+tuned.stats;
+// { states: 5, alphabetSize: 3, backend: 'dense', transitionBytes: 40, outputBytes: 28 }
+```
+
+### TypeScriptの型
+
+`Match`・`MatchCallback`・`Options`をエクスポートしています。
+
+```ts
+import { AhoCorasick } from '@naoya-tatetsu/aho-corasick';
+import type { Match, MatchCallback, Options } from '@naoya-tatetsu/aho-corasick';
+
+const options: Options = { maxDenseBytes: 8 * 1024 * 1024 };
+const matcher = new AhoCorasick(['he', 'she'], options);
+const matches: Match[] = matcher.findAll('ushers');
+
+const onMatch: MatchCallback = (patternIndex, start, end) => {
+  if (start > 100) return false;   // 打ち切り
+};
+matcher.forEach('ushers', onMatch);
+```
+
+### 向かない用途
+
+- パターンが呼び出しごとに変わる場合。構築コストを回収できません。
+- 文字クラス・繰り返し・単語境界などの柔軟な照合。正規表現を使ってください。
+- 構築後の辞書の追加・削除。インスタンスは不変で、作り直しが必要です。
+- チャンクをまたぐストリーム検索。状態は各呼び出し内に閉じています。
 
 ## 開発
 
@@ -32,7 +222,7 @@ pnpm bench
 pnpm pack
 ```
 
-`pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。scopedパッケージのため`publishConfig.access`に`public`を設定済みで、`npm publish`で公開できます（`@naoya-tatetsu`スコープが公開アカウントと一致している必要があります）。ESMと型定義を出力し、Node.js 22.12以降の`require(ESM)`でも読み込めます（古いNode向けCJSビルドは含みません）。本体はNode固有APIを使わず、ブラウザのESMとしても利用可能です。ブラウザでの性能検証は未実施です。
+`pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。scopedパッケージのため`publishConfig.access`に`public`を設定済みで、`npm publish`で公開できます（`@naoya-tatetsu`スコープが公開アカウントと一致している必要があります）。
 
 ## APIと一致の仕様
 
