@@ -1,0 +1,854 @@
+{
+  "generatedAt": "2026-09-10T15:57:03.559Z",
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M2 Max",
+  "seed": 42,
+  "versions": {
+    "typescript": "7.0.2",
+    "ahocorasick": "1.0.2",
+    "modern-ahocorasick": "2.0.4",
+    "@monyone/aho-corasick": "1.5.10",
+    "@stll/aho-corasick": "1.0.4"
+  },
+  "methodology": "7 samples of >=35ms after >=60ms warmup; median/min/max milliseconds per call. Build and native result allocation are included in their respective operations. Normalization and correctness verification are outside timing. count has no equivalent in other tested APIs and is not an apples-to-apples findAll comparison. Synthetic fixtures only.",
+  "skipped": [
+    {
+      "scenario": "unicode",
+      "name": "modern-ahocorasick",
+      "reason": "JavaScript heap out of memory at the 512 MiB --max-old-space-size cap",
+      "status": null,
+      "signal": "SIGABRT"
+    },
+    {
+      "scenario": "large-alphabet",
+      "name": "modern-ahocorasick",
+      "reason": "JavaScript heap out of memory at the 512 MiB --max-old-space-size cap",
+      "status": null,
+      "signal": "SIGABRT"
+    }
+  ],
+  "results": [
+    {
+      "scenario": "ascii-many",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 1.3605368461538467,
+        "minMs": 1.2897530000000006,
+        "maxMs": 1.47197
+      },
+      "findAll": {
+        "medianMs": 0.41939533333333434,
+        "minMs": 0.4162906823529417,
+        "maxMs": 0.4286173780487815
+      },
+      "count": {
+        "medianMs": 0.3677317708333329,
+        "minMs": 0.3640687319587627,
+        "maxMs": 0.3720912210526326
+      },
+      "test": {
+        "medianMs": 0.00005723769885917636,
+        "minMs": 0.00005555932668847761,
+        "maxMs": 0.0000579760493225931
+      },
+      "forEach": {
+        "medianMs": 0.4031652298850589,
+        "minMs": 0.4019659090909096,
+        "maxMs": 0.41948313095237955
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022,
+        "outputBytes": 33172
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "ahocorasick",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 2.113828411764707,
+        "minMs": 2.037419,
+        "maxMs": 2.2955963750000006
+      },
+      "findAll": {
+        "medianMs": 4.859505249999998,
+        "minMs": 4.782994875,
+        "maxMs": 5.0819761428571315
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "modern-ahocorasick",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 14.346541666666667,
+        "minMs": 13.148666666666676,
+        "maxMs": 15.812971999999982
+      },
+      "findAll": {
+        "medianMs": 31.01245849999998,
+        "minMs": 30.488646000000017,
+        "maxMs": 40.590958
+      },
+      "test": {
+        "medianMs": 0.13726090234375032,
+        "minMs": 0.09441633422459911,
+        "maxMs": 0.6078647384615403
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "@monyone/aho-corasick",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 1.7744875000000007,
+        "minMs": 1.6167461818181825,
+        "maxMs": 1.8170895999999999
+      },
+      "findAll": {
+        "medianMs": 6.480847166666668,
+        "minMs": 6.3029931666666625,
+        "maxMs": 7.863006833333334
+      },
+      "test": {
+        "medianMs": 0.00014171363557225492,
+        "minMs": 0.00013422264747164095,
+        "maxMs": 0.00014386115803708327
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 6.285291666666666,
+        "minMs": 5.618303571428571,
+        "maxMs": 6.546180500000001
+      },
+      "findAll": {
+        "medianMs": 2.583345214285714,
+        "minMs": 2.5677232142857145,
+        "maxMs": 2.627886857142861
+      },
+      "test": {
+        "medianMs": 0.00010541628340546788,
+        "minMs": 0.00010455051259379641,
+        "maxMs": 0.00010828924538225932
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "@stll/aho-corasick",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 0.7455225624999997,
+        "minMs": 0.7386171874999997,
+        "maxMs": 0.7693659347826084
+      },
+      "findAll": {
+        "medianMs": 0.4601434025974032,
+        "minMs": 0.4573409090909087,
+        "maxMs": 0.4643081184210527
+      },
+      "test": {
+        "medianMs": 0.00842775294967493,
+        "minMs": 0.008368386086540757,
+        "maxMs": 0.00850581073858114
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 1.4514649999999982,
+        "minMs": 1.3577788461538467,
+        "maxMs": 1.508795125
+      },
+      "findAll": {
+        "medianMs": 0.04266057612667473,
+        "minMs": 0.04182994862604539,
+        "maxMs": 0.04301878624078638
+      },
+      "count": {
+        "medianMs": 0.04230706521739133,
+        "minMs": 0.04204421728691476,
+        "maxMs": 0.043303512978986304
+      },
+      "test": {
+        "medianMs": 0.04293336397058827,
+        "minMs": 0.04242322397094452,
+        "maxMs": 0.04338011152416355
+      },
+      "forEach": {
+        "medianMs": 0.04260994525547438,
+        "minMs": 0.0419944544364511,
+        "maxMs": 0.0428036870415648
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022,
+        "outputBytes": 33172
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "ahocorasick",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 2.0814877058823544,
+        "minMs": 2.0619191176470575,
+        "maxMs": 2.173561294117647
+      },
+      "findAll": {
+        "medianMs": 1.2458189655172442,
+        "minMs": 1.2310891034482767,
+        "maxMs": 1.2596324642857155
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "modern-ahocorasick",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 14.240680666666663,
+        "minMs": 12.757541666666668,
+        "maxMs": 15.359360999999998
+      },
+      "findAll": {
+        "medianMs": 26.32235400000002,
+        "minMs": 26.081999999999994,
+        "maxMs": 26.684353999999985
+      },
+      "test": {
+        "medianMs": 26.52914599999997,
+        "minMs": 26.06468749999999,
+        "maxMs": 27.1099375
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "@monyone/aho-corasick",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 1.681698428571428,
+        "minMs": 1.6221799090909081,
+        "maxMs": 1.7793354000000008
+      },
+      "findAll": {
+        "medianMs": 1.7914791500000007,
+        "minMs": 1.7821062499999982,
+        "maxMs": 1.8088479000000006
+      },
+      "test": {
+        "medianMs": 1.8615000000000022,
+        "minMs": 1.8085603999999988,
+        "maxMs": 2.0117592777777733
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 5.597619142857143,
+        "minMs": 4.436765625,
+        "maxMs": 5.880666666666666
+      },
+      "findAll": {
+        "medianMs": 1.2577991071428565,
+        "minMs": 1.2349612068965496,
+        "maxMs": 1.272575892857142
+      },
+      "test": {
+        "medianMs": 1.2369755862068932,
+        "minMs": 1.2166264482758606,
+        "maxMs": 1.260147321428572
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "@stll/aho-corasick",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.738484375,
+        "minMs": 0.7338498333333341,
+        "maxMs": 0.7449805106382984
+      },
+      "findAll": {
+        "medianMs": 0.1780450507614214,
+        "minMs": 0.1759746633165829,
+        "maxMs": 0.17909608673469404
+      },
+      "test": {
+        "medianMs": 0.14098493975903598,
+        "minMs": 0.13894444444444404,
+        "maxMs": 0.14175487500000006
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "local",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.005390843985830894,
+        "minMs": 0.00527522953040337,
+        "maxMs": 0.0057967249089102375
+      },
+      "findAll": {
+        "medianMs": 0.3132146517857142,
+        "minMs": 0.3034163017241377,
+        "maxMs": 0.3145837053571431
+      },
+      "count": {
+        "medianMs": 0.1913966338797813,
+        "minMs": 0.1873709893048127,
+        "maxMs": 0.19357135911602227
+      },
+      "test": {
+        "medianMs": 0.00006445611017709127,
+        "minMs": 0.00006414848986369469,
+        "maxMs": 0.0000650629657789025
+      },
+      "forEach": {
+        "medianMs": 0.27844312698412715,
+        "minMs": 0.27658070866141676,
+        "maxMs": 0.28054732800000054
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 13,
+        "backend": "dense",
+        "transitionBytes": 700,
+        "outputBytes": 116
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "ahocorasick",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.002365106959459463,
+        "minMs": 0.0023402169552717805,
+        "maxMs": 0.0023910359314160824
+      },
+      "findAll": {
+        "medianMs": 2.2329661250000044,
+        "minMs": 2.190083312499997,
+        "maxMs": 2.281932312499997
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "modern-ahocorasick",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.037832343412527024,
+        "minMs": 0.03622388831437436,
+        "maxMs": 0.038793420819490596
+      },
+      "findAll": {
+        "medianMs": 25.376479500000016,
+        "minMs": 25.29008349999998,
+        "maxMs": 25.872479
+      },
+      "test": {
+        "medianMs": 0.13413154789272028,
+        "minMs": 0.10455945074626904,
+        "maxMs": 0.24843409929077961
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "@monyone/aho-corasick",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.0026239382447725405,
+        "minMs": 0.0025898164397750822,
+        "maxMs": 0.002842035960711097
+      },
+      "findAll": {
+        "medianMs": 3.9026749999999995,
+        "minMs": 3.8522542000000044,
+        "maxMs": 3.9391851111111134
+      },
+      "test": {
+        "medianMs": 0.0007731222830888835,
+        "minMs": 0.0007639622604444039,
+        "maxMs": 0.0007824138239370498
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.006023005505849966,
+        "minMs": 0.005398892041949414,
+        "maxMs": 0.006807183479105926
+      },
+      "findAll": {
+        "medianMs": 1.0607171818181804,
+        "minMs": 1.0530821176470562,
+        "maxMs": 1.1194726562500001
+      },
+      "test": {
+        "medianMs": 0.00036192557855768996,
+        "minMs": 0.00035736420257300323,
+        "maxMs": 0.00036848405537716464
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "@stll/aho-corasick",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.017949940030753463,
+        "minMs": 0.0176879,
+        "maxMs": 0.018322475143903717
+      },
+      "findAll": {
+        "medianMs": 0.21794073291925467,
+        "minMs": 0.2141168658536581,
+        "maxMs": 0.22576976282051275
+      },
+      "test": {
+        "medianMs": 0.007692793186813211,
+        "minMs": 0.007545043974994625,
+        "maxMs": 0.00800142857142855
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "local",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.03634115613026818,
+        "minMs": 0.028998895608947802,
+        "maxMs": 0.04062191571753987
+      },
+      "findAll": {
+        "medianMs": 2.669321428571428,
+        "minMs": 2.2065364374999987,
+        "maxMs": 3.0416458571428557
+      },
+      "count": {
+        "medianMs": 0.00691077650542943,
+        "minMs": 0.006812978396263118,
+        "maxMs": 0.007026553793657173
+      },
+      "test": {
+        "medianMs": 0.00004316695793738395,
+        "minMs": 0.000042631306518892955,
+        "maxMs": 0.00004487437512580809
+      },
+      "forEach": {
+        "medianMs": 0.5949208983050863,
+        "minMs": 0.5844819500000009,
+        "maxMs": 0.6003594576271183
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 1,
+        "backend": "dense",
+        "transitionBytes": 100,
+        "outputBytes": 1300
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "ahocorasick",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.005106695652173918,
+        "minMs": 0.005018939936926605,
+        "maxMs": 0.005208581312304718
+      },
+      "findAll": {
+        "medianMs": 0.039423893018018026,
+        "minMs": 0.038774870431893635,
+        "maxMs": 0.045182365161290365
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "modern-ahocorasick",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.25024702142857164,
+        "minMs": 0.225704326923077,
+        "maxMs": 0.32933021495327114
+      },
+      "findAll": {
+        "medianMs": 1.022897628571429,
+        "minMs": 1.0043714285714291,
+        "maxMs": 1.1290887096774198
+      },
+      "test": {
+        "medianMs": 0.010199652972027982,
+        "minMs": 0.009956354095563131,
+        "maxMs": 0.011903958177490693
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "@monyone/aho-corasick",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.015713829071332428,
+        "minMs": 0.015346869355545805,
+        "maxMs": 0.016020537757437083
+      },
+      "findAll": {
+        "medianMs": 2.3836519411764745,
+        "minMs": 2.2710104374999958,
+        "maxMs": 2.548985142857142
+      },
+      "test": {
+        "medianMs": 0.00002995081312083685,
+        "minMs": 0.000029635822341292097,
+        "maxMs": 0.000031425016049166585
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.01855122787493376,
+        "minMs": 0.017847265035677864,
+        "maxMs": 0.0188771563342318
+      },
+      "findAll": {
+        "medianMs": 2.5560148571428516,
+        "minMs": 2.0645564117647033,
+        "maxMs": 3.355359818181827
+      },
+      "test": {
+        "medianMs": 0.00003162138049419526,
+        "minMs": 0.000031464161591971136,
+        "maxMs": 0.00003348272873378491
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "@stll/aho-corasick",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.01853895180084746,
+        "minMs": 0.018401033105622702,
+        "maxMs": 0.01888484358144552
+      },
+      "findAll": {
+        "medianMs": 5.969395833333333,
+        "minMs": 4.617442750000009,
+        "maxMs": 13.260652666666639
+      },
+      "test": {
+        "medianMs": 0.0005055203795713218,
+        "minMs": 0.0004988336753890889,
+        "maxMs": 0.0005148407248871037
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "local",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.0041951552013422795,
+        "minMs": 0.004119498058138167,
+        "maxMs": 0.004343472142945771
+      },
+      "findAll": {
+        "medianMs": 0.7068292352941178,
+        "minMs": 0.6645015660377362,
+        "maxMs": 0.7677572608695646
+      },
+      "count": {
+        "medianMs": 0.21929556874999961,
+        "minMs": 0.21670910493827128,
+        "maxMs": 0.22324761146496844
+      },
+      "test": {
+        "medianMs": 0.00004180087662201961,
+        "minMs": 0.000041280206164896676,
+        "maxMs": 0.0000425528707040349
+      },
+      "forEach": {
+        "medianMs": 0.3965842696629219,
+        "minMs": 0.393153233333333,
+        "maxMs": 0.39815861363636496
+      },
+      "stats": {
+        "states": 13,
+        "alphabetSize": 11,
+        "backend": "dense",
+        "transitionBytes": 312,
+        "outputBytes": 76
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "ahocorasick",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.002166473264017824,
+        "minMs": 0.0021367481382004645,
+        "maxMs": 0.00218404205665793
+      },
+      "findAll": {
+        "medianMs": 7.0531736666666704,
+        "minMs": 6.756069500000005,
+        "maxMs": 7.366800000000012
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "@monyone/aho-corasick",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.0016742261625961857,
+        "minMs": 0.001652550257306075,
+        "maxMs": 0.001737508687450357
+      },
+      "findAll": {
+        "medianMs": 4.825796875000002,
+        "minMs": 4.384224000000003,
+        "maxMs": 5.159351142857157
+      },
+      "test": {
+        "medianMs": 0.0000742566406415749,
+        "minMs": 0.0000734685534723214,
+        "maxMs": 0.00007516018003934078
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.004238124107034747,
+        "minMs": 0.004179095010742422,
+        "maxMs": 0.004421803334596442
+      },
+      "findAll": {
+        "medianMs": 2.2756171875000035,
+        "minMs": 2.1932474374999984,
+        "maxMs": 2.463263866666667
+      },
+      "test": {
+        "medianMs": 0.00007365638494886151,
+        "minMs": 0.00007299000458792133,
+        "maxMs": 0.00007524821071143709
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "@stll/aho-corasick",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.02064261497641511,
+        "minMs": 0.02046179135008766,
+        "maxMs": 0.021708643521388734
+      },
+      "findAll": {
+        "medianMs": 2.7022756153846172,
+        "minMs": 2.583211357142854,
+        "maxMs": 3.065138916666674
+      },
+      "test": {
+        "medianMs": 0.14498639669421506,
+        "minMs": 0.14310799183673475,
+        "maxMs": 0.1474131638655463
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "local",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 1.086195696969697,
+        "minMs": 1.0729116363636353,
+        "maxMs": 1.133168
+      },
+      "findAll": {
+        "medianMs": 0.22772753896103898,
+        "minMs": 0.22572809615384598,
+        "maxMs": 0.23500810738255037
+      },
+      "count": {
+        "medianMs": 0.1632056186046511,
+        "minMs": 0.15398574561403502,
+        "maxMs": 0.1667021857142859
+      },
+      "test": {
+        "medianMs": 0.000028778226990066654,
+        "minMs": 0.000028518263394744953,
+        "maxMs": 0.000030016671998161126
+      },
+      "forEach": {
+        "medianMs": 0.19640083798882751,
+        "minMs": 0.19245260989011068,
+        "maxMs": 0.20223156321838975
+      },
+      "stats": {
+        "states": 4001,
+        "alphabetSize": 2001,
+        "backend": "dense",
+        "transitionBytes": 16020004,
+        "outputBytes": 24004
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "ahocorasick",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 0.9688749999999994,
+        "minMs": 0.9416392368421049,
+        "maxMs": 1.3688846153846157
+      },
+      "findAll": {
+        "medianMs": 2.336605533333333,
+        "minMs": 2.303695312500004,
+        "maxMs": 2.3993000000000015
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "@monyone/aho-corasick",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 0.617515350877193,
+        "minMs": 0.5902013833333333,
+        "maxMs": 0.6411636363636365
+      },
+      "findAll": {
+        "medianMs": 1.2040694333333326,
+        "minMs": 1.185427766666667,
+        "maxMs": 1.2356652413793066
+      },
+      "test": {
+        "medianMs": 0.0000825470752496451,
+        "minMs": 0.00008176539284579596,
+        "maxMs": 0.00008492166144603756
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "@monyone/aho-corasick/fast",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 13.114916666666678,
+        "minMs": 12.810791666666669,
+        "maxMs": 13.646111
+      },
+      "findAll": {
+        "medianMs": 0.7369661458333331,
+        "minMs": 0.7274778979591822,
+        "maxMs": 0.7611068913043492
+      },
+      "test": {
+        "medianMs": 0.00007901945675511543,
+        "minMs": 0.00007812780338627412,
+        "maxMs": 0.00008016896559622502
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "@stll/aho-corasick",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 1.8924956315789454,
+        "minMs": 1.8655833684210534,
+        "maxMs": 1.9469780526315787
+      },
+      "findAll": {
+        "medianMs": 0.6780264423076917,
+        "minMs": 0.6702067547169802,
+        "maxMs": 0.6829070384615363
+      },
+      "test": {
+        "medianMs": 0.04003242857142855,
+        "minMs": 0.03983139204545448,
+        "maxMs": 0.04046984624277463
+      }
+    }
+  ]
+}

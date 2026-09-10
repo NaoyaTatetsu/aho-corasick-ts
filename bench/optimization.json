@@ -1,0 +1,1020 @@
+{
+  "generatedAt": "2026-09-10T14:52:25.382Z",
+  "node": "v22.12.0",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": "Apple M2 Max",
+  "seed": 42,
+  "versions": {
+    "typescript": "7.0.2",
+    "ahocorasick": "1.0.2",
+    "modern-ahocorasick": "2.0.4",
+    "@monyone/aho-corasick": "1.5.10",
+    "@stll/aho-corasick": "1.0.4"
+  },
+  "methodology": "7 samples of >=35ms after >=60ms warmup; median/min/max milliseconds per call. Build and native result allocation are included in their respective operations. Normalization and correctness verification are outside timing. count has no equivalent in other tested APIs and is not an apples-to-apples findAll comparison. Synthetic fixtures only.",
+  "skipped": [],
+  "results": [
+    {
+      "scenario": "ascii-many",
+      "package": "before",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 1.3671250000000004,
+        "minMs": 1.3453348888888896,
+        "maxMs": 1.4180333200000006
+      },
+      "findAll": {
+        "medianMs": 0.4594496753246749,
+        "minMs": 0.45173664102564093,
+        "maxMs": 0.51915869117647
+      },
+      "count": {
+        "medianMs": 0.37996416129032295,
+        "minMs": 0.3698201684210517,
+        "maxMs": 0.3924546333333334
+      },
+      "test": {
+        "medianMs": 0.00005779587536597088,
+        "minMs": 0.00005744684954395575,
+        "maxMs": 0.00006110962276471585
+      },
+      "forEach": {
+        "medianMs": 0.42908891463414645,
+        "minMs": 0.42508584337349337,
+        "maxMs": 0.4326687283950613
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022
+      }
+    },
+    {
+      "scenario": "ascii-many",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 1.3592980769230765,
+        "minMs": 1.3352855185185182,
+        "maxMs": 1.5245905652173914
+      },
+      "findAll": {
+        "medianMs": 0.4276798780487805,
+        "minMs": 0.42094494047619047,
+        "maxMs": 0.4321589506172836
+      },
+      "count": {
+        "medianMs": 0.37037368421052563,
+        "minMs": 0.3642693298969069,
+        "maxMs": 0.3765250860215056
+      },
+      "test": {
+        "medianMs": 0.00005805523680618089,
+        "minMs": 0.00005760001053244794,
+        "maxMs": 0.00005895628664747476
+      },
+      "forEach": {
+        "medianMs": 0.40764389534883827,
+        "minMs": 0.40484913793103655,
+        "maxMs": 0.41581911764705826
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022,
+        "outputBytes": 33172
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "before",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 1.3293333333333341,
+        "minMs": 1.2550550357142864,
+        "maxMs": 1.4707187500000003
+      },
+      "findAll": {
+        "medianMs": 0.04258454921020654,
+        "minMs": 0.04209730649038471,
+        "maxMs": 0.043639737235367376
+      },
+      "count": {
+        "medianMs": 0.0428352689486553,
+        "minMs": 0.04247904,
+        "maxMs": 0.04323323086419752
+      },
+      "test": {
+        "medianMs": 0.042245124246079756,
+        "minMs": 0.041912679425837304,
+        "maxMs": 0.04248270631067965
+      },
+      "forEach": {
+        "medianMs": 0.04388502506265668,
+        "minMs": 0.04288244553243569,
+        "maxMs": 0.04482234314980811
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022
+      }
+    },
+    {
+      "scenario": "ascii-no-match",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 110000,
+      "matches": 0,
+      "build": {
+        "medianMs": 1.5295923913043474,
+        "minMs": 1.40378332,
+        "maxMs": 2.473972199999999
+      },
+      "findAll": {
+        "medianMs": 0.044151430012610286,
+        "minMs": 0.04339942131350679,
+        "maxMs": 0.04599665965834431
+      },
+      "count": {
+        "medianMs": 0.04295925398773008,
+        "minMs": 0.04251896237864076,
+        "maxMs": 0.043730181023720345
+      },
+      "test": {
+        "medianMs": 0.04244964727272721,
+        "minMs": 0.042091336134453816,
+        "maxMs": 0.043349783415841545
+      },
+      "forEach": {
+        "medianMs": 0.04269425853658532,
+        "minMs": 0.0419391724550896,
+        "maxMs": 0.04331808776267003
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022,
+        "outputBytes": 33172
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "before",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.005275895538136871,
+        "minMs": 0.005076220739666425,
+        "maxMs": 0.005537883581145206
+      },
+      "findAll": {
+        "medianMs": 0.31298549107142853,
+        "minMs": 0.30710416666666634,
+        "maxMs": 0.3190087090909091
+      },
+      "count": {
+        "medianMs": 0.1903763586956518,
+        "minMs": 0.18686946276595717,
+        "maxMs": 0.19276121978021973
+      },
+      "test": {
+        "medianMs": 0.00006533559642857834,
+        "minMs": 0.00006506450293626135,
+        "maxMs": 0.00006603319189719987
+      },
+      "forEach": {
+        "medianMs": 0.2787913333333332,
+        "minMs": 0.27352408593750077,
+        "maxMs": 0.2804123280000003
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 13,
+        "backend": "dense",
+        "transitionBytes": 700
+      }
+    },
+    {
+      "scenario": "small-dictionary",
+      "package": "local",
+      "patterns": 4,
+      "codeUnits": 96000,
+      "matches": 4000,
+      "build": {
+        "medianMs": 0.005403802716887928,
+        "minMs": 0.005375607894332669,
+        "maxMs": 0.0059046071850227715
+      },
+      "findAll": {
+        "medianMs": 0.31558257657657574,
+        "minMs": 0.30887682456140336,
+        "maxMs": 0.3295140186915881
+      },
+      "count": {
+        "medianMs": 0.1851129421052633,
+        "minMs": 0.18371705759162316,
+        "maxMs": 0.19073935869565223
+      },
+      "test": {
+        "medianMs": 0.00006477190904565301,
+        "minMs": 0.00006357036214997834,
+        "maxMs": 0.00006744471871832551
+      },
+      "forEach": {
+        "medianMs": 0.283541000000001,
+        "minMs": 0.2808829999999998,
+        "maxMs": 0.2898019999999994
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 13,
+        "backend": "dense",
+        "transitionBytes": 700,
+        "outputBytes": 116
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "before",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.03128698762157382,
+        "minMs": 0.028343724696356282,
+        "maxMs": 0.03321896691871456
+      },
+      "findAll": {
+        "medianMs": 2.769419846153841,
+        "minMs": 2.445022266666668,
+        "maxMs": 3.745136363636355
+      },
+      "count": {
+        "medianMs": 0.005712759791122715,
+        "minMs": 0.005682724512987013,
+        "maxMs": 0.005781406606110643
+      },
+      "test": {
+        "medianMs": 0.00004262153792572679,
+        "minMs": 0.00004227124580458376,
+        "maxMs": 0.00004298153524219329
+      },
+      "forEach": {
+        "medianMs": 0.7641666521739126,
+        "minMs": 0.7569033617021287,
+        "maxMs": 0.7806592666666701
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 1,
+        "backend": "dense",
+        "transitionBytes": 100
+      }
+    },
+    {
+      "scenario": "suffix-heavy",
+      "package": "local",
+      "patterns": 24,
+      "codeUnits": 4000,
+      "matches": 95724,
+      "build": {
+        "medianMs": 0.03443019649446493,
+        "minMs": 0.02906154854771783,
+        "maxMs": 0.03970610789766406
+      },
+      "findAll": {
+        "medianMs": 2.4779805333333345,
+        "minMs": 2.3820078124999995,
+        "maxMs": 3.1840705384615395
+      },
+      "count": {
+        "medianMs": 0.006787675392670162,
+        "minMs": 0.006690550267584073,
+        "maxMs": 0.006872799332417058
+      },
+      "test": {
+        "medianMs": 0.000043297858864163825,
+        "minMs": 0.00004285591298576936,
+        "maxMs": 0.00004339109493937669
+      },
+      "forEach": {
+        "medianMs": 0.587159033333334,
+        "minMs": 0.5845750000000028,
+        "maxMs": 0.5933128474576287
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 1,
+        "backend": "dense",
+        "transitionBytes": 100,
+        "outputBytes": 1300
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "before",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.004288726292575348,
+        "minMs": 0.004110656216977809,
+        "maxMs": 0.004487213177797719
+      },
+      "findAll": {
+        "medianMs": 0.7730130208333333,
+        "minMs": 0.7145178571428558,
+        "maxMs": 0.8174791590909081
+      },
+      "count": {
+        "medianMs": 0.21562960122699423,
+        "minMs": 0.21249115757575784,
+        "maxMs": 0.22118291194968567
+      },
+      "test": {
+        "medianMs": 0.000042938453686914725,
+        "minMs": 0.00004235800487960737,
+        "maxMs": 0.00004330615823004882
+      },
+      "forEach": {
+        "medianMs": 0.43635493827160465,
+        "minMs": 0.43323302469135894,
+        "maxMs": 0.44398998734177325
+      },
+      "stats": {
+        "states": 13,
+        "alphabetSize": 11,
+        "backend": "dense",
+        "transitionBytes": 312
+      }
+    },
+    {
+      "scenario": "unicode",
+      "package": "local",
+      "patterns": 6,
+      "codeUnits": 72000,
+      "matches": 28000,
+      "build": {
+        "medianMs": 0.003981365673339399,
+        "minMs": 0.0039211883749579995,
+        "maxMs": 0.004103988392543084
+      },
+      "findAll": {
+        "medianMs": 0.733170145833333,
+        "minMs": 0.6670173018867916,
+        "maxMs": 0.8559146341463408
+      },
+      "count": {
+        "medianMs": 0.21698559876543194,
+        "minMs": 0.2150503558282211,
+        "maxMs": 0.2258553741935481
+      },
+      "test": {
+        "medianMs": 0.00004157159723253249,
+        "minMs": 0.000041078897116385785,
+        "maxMs": 0.000041919530262834716
+      },
+      "forEach": {
+        "medianMs": 0.39885890909090965,
+        "minMs": 0.3955721011235955,
+        "maxMs": 0.406098655172413
+      },
+      "stats": {
+        "states": 13,
+        "alphabetSize": 11,
+        "backend": "dense",
+        "transitionBytes": 312,
+        "outputBytes": 76
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "before",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 1.1296770937499998,
+        "minMs": 1.066315666666667,
+        "maxMs": 1.2137557241379309
+      },
+      "findAll": {
+        "medianMs": 0.2506473214285713,
+        "minMs": 0.24847458865248231,
+        "maxMs": 0.25849111764705873
+      },
+      "count": {
+        "medianMs": 0.1549205353982299,
+        "minMs": 0.15354532017543857,
+        "maxMs": 0.16515271226415104
+      },
+      "test": {
+        "medianMs": 0.000028862453418172172,
+        "minMs": 0.00002799044891613635,
+        "maxMs": 0.000029524120670413712
+      },
+      "forEach": {
+        "medianMs": 0.2001738114285711,
+        "minMs": 0.19941548295454548,
+        "maxMs": 0.2030476878612717
+      },
+      "stats": {
+        "states": 4001,
+        "alphabetSize": 2001,
+        "backend": "dense",
+        "transitionBytes": 16020004
+      }
+    },
+    {
+      "scenario": "large-alphabet",
+      "package": "local",
+      "patterns": 2000,
+      "codeUnits": 20000,
+      "matches": 10000,
+      "build": {
+        "medianMs": 1.11245703125,
+        "minMs": 1.08048106060606,
+        "maxMs": 1.2221135172413795
+      },
+      "findAll": {
+        "medianMs": 0.23001007843137272,
+        "minMs": 0.223958063694267,
+        "maxMs": 0.23826813605442182
+      },
+      "count": {
+        "medianMs": 0.1545704845814977,
+        "minMs": 0.15362353508771925,
+        "maxMs": 0.16079969266055014
+      },
+      "test": {
+        "medianMs": 0.000028488298269789752,
+        "minMs": 0.000027849456539036993,
+        "maxMs": 0.00002924824762254937
+      },
+      "forEach": {
+        "medianMs": 0.18230598958333388,
+        "minMs": 0.18121477835051544,
+        "maxMs": 0.1831312916666666
+      },
+      "stats": {
+        "states": 4001,
+        "alphabetSize": 2001,
+        "backend": "dense",
+        "transitionBytes": 16020004,
+        "outputBytes": 24004
+      }
+    },
+    {
+      "scenario": "small-dense",
+      "package": "before",
+      "patterns": 4,
+      "codeUnits": 16000,
+      "matches": 63994,
+      "build": {
+        "medianMs": 0.011807204193548401,
+        "minMs": 0.011199210446401455,
+        "maxMs": 0.013601408653846155
+      },
+      "findAll": {
+        "medianMs": 3.3578181818181747,
+        "minMs": 3.258746181818181,
+        "maxMs": 3.683695799999998
+      },
+      "count": {
+        "medianMs": 0.746507085106385,
+        "minMs": 0.7367395833333342,
+        "maxMs": 0.7499299574468088
+      },
+      "test": {
+        "medianMs": 0.00003444860286808181,
+        "minMs": 0.00003380889422960834,
+        "maxMs": 0.000034983027911699706
+      },
+      "forEach": {
+        "medianMs": 2.473180600000008,
+        "minMs": 2.427408333333339,
+        "maxMs": 2.486927733333338
+      },
+      "stats": {
+        "states": 5,
+        "alphabetSize": 1,
+        "backend": "dense",
+        "transitionBytes": 20
+      }
+    },
+    {
+      "scenario": "small-dense",
+      "package": "local",
+      "patterns": 4,
+      "codeUnits": 16000,
+      "matches": 63994,
+      "build": {
+        "medianMs": 0.012567719391365901,
+        "minMs": 0.011269773663876369,
+        "maxMs": 0.013599557535838823
+      },
+      "findAll": {
+        "medianMs": 3.6342667000000004,
+        "minMs": 3.30632572727273,
+        "maxMs": 4.136226888888889
+      },
+      "count": {
+        "medianMs": 0.7651259130434779,
+        "minMs": 0.7583838510638277,
+        "maxMs": 0.8020092666666667
+      },
+      "test": {
+        "medianMs": 0.00003496736058313363,
+        "minMs": 0.00003429389081510993,
+        "maxMs": 0.000035374000656880966
+      },
+      "forEach": {
+        "medianMs": 2.4659583333333255,
+        "minMs": 2.431227800000003,
+        "maxMs": 2.5493095000000006
+      },
+      "stats": {
+        "states": 5,
+        "alphabetSize": 1,
+        "backend": "dense",
+        "transitionBytes": 20,
+        "outputBytes": 60
+      }
+    },
+    {
+      "scenario": "small-no-match",
+      "package": "before",
+      "patterns": 4,
+      "codeUnits": 128000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.005347708174178764,
+        "minMs": 0.005219068246163017,
+        "maxMs": 0.005415951106297388
+      },
+      "findAll": {
+        "medianMs": 0.25045089285714295,
+        "minMs": 0.24597174125874183,
+        "maxMs": 0.2561721386861312
+      },
+      "count": {
+        "medianMs": 0.25284262589928064,
+        "minMs": 0.24949999999999972,
+        "maxMs": 0.25991388888888833
+      },
+      "test": {
+        "medianMs": 0.24751027464788766,
+        "minMs": 0.24575407692307769,
+        "maxMs": 0.2520356690647483
+      },
+      "forEach": {
+        "medianMs": 0.2491013617021276,
+        "minMs": 0.24684624647887202,
+        "maxMs": 0.2548348405797107
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 13,
+        "backend": "dense",
+        "transitionBytes": 700
+      }
+    },
+    {
+      "scenario": "small-no-match",
+      "package": "local",
+      "patterns": 4,
+      "codeUnits": 128000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.005747106386471845,
+        "minMs": 0.005475783479349189,
+        "maxMs": 0.005838028671445241
+      },
+      "findAll": {
+        "medianMs": 0.25151428571428563,
+        "minMs": 0.2479694859154932,
+        "maxMs": 0.26206623134328394
+      },
+      "count": {
+        "medianMs": 0.2544840000000007,
+        "minMs": 0.2517613142857142,
+        "maxMs": 0.2593607999999996
+      },
+      "test": {
+        "medianMs": 0.25088719999999964,
+        "minMs": 0.24812206338028261,
+        "maxMs": 0.2589240220588234
+      },
+      "forEach": {
+        "medianMs": 0.24990986524822634,
+        "minMs": 0.24525583216783237,
+        "maxMs": 0.25176219999999927
+      },
+      "stats": {
+        "states": 25,
+        "alphabetSize": 13,
+        "backend": "dense",
+        "transitionBytes": 700,
+        "outputBytes": 116
+      }
+    },
+    {
+      "scenario": "late-match",
+      "package": "before",
+      "patterns": 5,
+      "codeUnits": 100007,
+      "matches": 1,
+      "build": {
+        "medianMs": 0.005437548532380803,
+        "minMs": 0.005225857270827121,
+        "maxMs": 0.00579188035743836
+      },
+      "findAll": {
+        "medianMs": 0.03910551562500001,
+        "minMs": 0.03861480154355021,
+        "maxMs": 0.03924906502242156
+      },
+      "count": {
+        "medianMs": 0.039329587640449436,
+        "minMs": 0.038742301991150356,
+        "maxMs": 0.03980833409090911
+      },
+      "test": {
+        "medianMs": 0.03938601462317215,
+        "minMs": 0.03908914620535724,
+        "maxMs": 0.050880207848837046
+      },
+      "forEach": {
+        "medianMs": 0.039268965246636645,
+        "minMs": 0.03845728100987938,
+        "maxMs": 0.0396384332579186
+      },
+      "stats": {
+        "states": 27,
+        "alphabetSize": 14,
+        "backend": "dense",
+        "transitionBytes": 810
+      }
+    },
+    {
+      "scenario": "late-match",
+      "package": "local",
+      "patterns": 5,
+      "codeUnits": 100007,
+      "matches": 1,
+      "build": {
+        "medianMs": 0.005526414048934491,
+        "minMs": 0.005454555001558111,
+        "maxMs": 0.005732141991483788
+      },
+      "findAll": {
+        "medianMs": 0.03906182608695651,
+        "minMs": 0.038930463333333214,
+        "maxMs": 0.03956666666666661
+      },
+      "count": {
+        "medianMs": 0.03876850276854931,
+        "minMs": 0.03855020264317173,
+        "maxMs": 0.03906252285395764
+      },
+      "test": {
+        "medianMs": 0.03883929157427928,
+        "minMs": 0.038271220765027265,
+        "maxMs": 0.04075945867287546
+      },
+      "forEach": {
+        "medianMs": 0.03983214903299208,
+        "minMs": 0.03937317210348718,
+        "maxMs": 0.04023448275862084
+      },
+      "stats": {
+        "states": 27,
+        "alphabetSize": 14,
+        "backend": "dense",
+        "transitionBytes": 810,
+        "outputBytes": 128
+      }
+    },
+    {
+      "scenario": "root-false-positive",
+      "package": "before",
+      "patterns": 5,
+      "codeUnits": 100000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.0037689108431140346,
+        "minMs": 0.0034080227692906487,
+        "maxMs": 0.00429075239029174
+      },
+      "findAll": {
+        "medianMs": 0.6566288518518512,
+        "minMs": 0.5861055666666668,
+        "maxMs": 0.7150974999999994
+      },
+      "count": {
+        "medianMs": 0.19834557062146896,
+        "minMs": 0.16702916666666634,
+        "maxMs": 0.31349107142857136
+      },
+      "test": {
+        "medianMs": 0.18349497905759116,
+        "minMs": 0.18028162564102598,
+        "maxMs": 0.1919489945355185
+      },
+      "forEach": {
+        "medianMs": 0.35008375000000114,
+        "minMs": 0.2818549999999996,
+        "maxMs": 0.3822767173913027
+      },
+      "stats": {
+        "states": 15,
+        "alphabetSize": 4,
+        "backend": "dense",
+        "transitionBytes": 150
+      }
+    },
+    {
+      "scenario": "root-false-positive",
+      "package": "local",
+      "patterns": 5,
+      "codeUnits": 100000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.003780314038876893,
+        "minMs": 0.0035660564269708703,
+        "maxMs": 0.004287306119951039
+      },
+      "findAll": {
+        "medianMs": 0.3019816810344823,
+        "minMs": 0.3005007094017091,
+        "maxMs": 0.3085051140350876
+      },
+      "count": {
+        "medianMs": 0.19622602234636874,
+        "minMs": 0.19300755494505512,
+        "maxMs": 0.19828248587570624
+      },
+      "test": {
+        "medianMs": 0.18846502139037394,
+        "minMs": 0.18194516062176216,
+        "maxMs": 0.20152490229885062
+      },
+      "forEach": {
+        "medianMs": 0.31190633628318565,
+        "minMs": 0.27337855038759634,
+        "maxMs": 0.36462109374999824
+      },
+      "stats": {
+        "states": 15,
+        "alphabetSize": 4,
+        "backend": "dense",
+        "transitionBytes": 150,
+        "outputBytes": 80
+      }
+    },
+    {
+      "scenario": "short-text",
+      "package": "before",
+      "patterns": 1200,
+      "codeUnits": 8,
+      "matches": 1,
+      "build": {
+        "medianMs": 1.6060890454545451,
+        "minMs": 1.444396680000002,
+        "maxMs": 3.9135166
+      },
+      "findAll": {
+        "medianMs": 0.00006776065723573025,
+        "minMs": 0.00006673669227439725,
+        "maxMs": 0.00007383992616033761
+      },
+      "count": {
+        "medianMs": 0.00003862866620978713,
+        "minMs": 0.00003814960787840147,
+        "maxMs": 0.000039933194366479914
+      },
+      "test": {
+        "medianMs": 0.00003746157905158439,
+        "minMs": 0.00003692420858516435,
+        "maxMs": 0.000038973361468053326
+      },
+      "forEach": {
+        "medianMs": 0.0000638930875475084,
+        "minMs": 0.00006312220234380923,
+        "maxMs": 0.00006671087040220755
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022
+      }
+    },
+    {
+      "scenario": "short-text",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 8,
+      "matches": 1,
+      "build": {
+        "medianMs": 1.487065958333332,
+        "minMs": 1.348902230769231,
+        "maxMs": 1.5312343749999997
+      },
+      "findAll": {
+        "medianMs": 0.00007286889075339823,
+        "minMs": 0.00007108994245811289,
+        "maxMs": 0.00007376436136021163
+      },
+      "count": {
+        "medianMs": 0.00003738016355943609,
+        "minMs": 0.00003702885704884943,
+        "maxMs": 0.0000376485452098794
+      },
+      "test": {
+        "medianMs": 0.000035975837743773434,
+        "minMs": 0.00003548805020223049,
+        "maxMs": 0.00003751666325444505
+      },
+      "forEach": {
+        "medianMs": 0.00006063081208522212,
+        "minMs": 0.00005973286516374558,
+        "maxMs": 0.00006183672845613472
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "dense",
+        "transitionBytes": 383022,
+        "outputBytes": 33172
+      }
+    },
+    {
+      "scenario": "empty-dictionary",
+      "package": "before",
+      "patterns": 0,
+      "codeUnits": 90000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.0010865431520863044,
+        "minMs": 0.0010715074850757688,
+        "maxMs": 0.0011049401123879275
+      },
+      "findAll": {
+        "medianMs": 0.00004932129570653128,
+        "minMs": 0.00004901716432855913,
+        "maxMs": 0.000050984739629765486
+      },
+      "count": {
+        "medianMs": 0.000030382395808286054,
+        "minMs": 0.00002990102005074625,
+        "maxMs": 0.000031267420357698036
+      },
+      "test": {
+        "medianMs": 0.00003080095764350364,
+        "minMs": 0.0000304518119198407,
+        "maxMs": 0.00003205868543525874
+      },
+      "forEach": {
+        "medianMs": 0.0000381043771923522,
+        "minMs": 0.0000374872056320709,
+        "maxMs": 0.000039272763281175636
+      },
+      "stats": {
+        "states": 1,
+        "alphabetSize": 0,
+        "backend": "dense",
+        "transitionBytes": 2
+      }
+    },
+    {
+      "scenario": "empty-dictionary",
+      "package": "local",
+      "patterns": 0,
+      "codeUnits": 90000,
+      "matches": 0,
+      "build": {
+        "medianMs": 0.00111599285805382,
+        "minMs": 0.001093535507857656,
+        "maxMs": 0.0011685099923264264
+      },
+      "findAll": {
+        "medianMs": 0.00005010942871091656,
+        "minMs": 0.00004964092708417482,
+        "maxMs": 0.00005116310280811001
+      },
+      "count": {
+        "medianMs": 0.00003096209894224876,
+        "minMs": 0.00003064857852400478,
+        "maxMs": 0.00003165574817278934
+      },
+      "test": {
+        "medianMs": 0.000030428796352726296,
+        "minMs": 0.000029942720702470036,
+        "maxMs": 0.000031749765279084315
+      },
+      "forEach": {
+        "medianMs": 0.000037931580914818764,
+        "minMs": 0.00003714659923690443,
+        "maxMs": 0.00003827811322611859
+      },
+      "stats": {
+        "states": 1,
+        "alphabetSize": 0,
+        "backend": "dense",
+        "transitionBytes": 2,
+        "outputBytes": 4
+      }
+    },
+    {
+      "scenario": "sparse-many",
+      "package": "before",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 0.8488591190476191,
+        "minMs": 0.8339821428571424,
+        "maxMs": 0.858422780487805
+      },
+      "findAll": {
+        "medianMs": 3.465825727272721,
+        "minMs": 3.4288674545454527,
+        "maxMs": 3.5694833000000017
+      },
+      "count": {
+        "medianMs": 3.087697916666665,
+        "minMs": 3.049753499999999,
+        "maxMs": 3.169343750000015
+      },
+      "test": {
+        "medianMs": 0.0001335743088524892,
+        "minMs": 0.00013151561267049958,
+        "maxMs": 0.00013584505992672233
+      },
+      "forEach": {
+        "medianMs": 3.3633522727272767,
+        "minMs": 3.3257159090909143,
+        "maxMs": 3.511295900000005
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "sparse",
+        "transitionBytes": 0
+      }
+    },
+    {
+      "scenario": "sparse-many",
+      "package": "local",
+      "patterns": 1200,
+      "codeUnits": 107999,
+      "matches": 1091,
+      "build": {
+        "medianMs": 1.0663813333333334,
+        "minMs": 1.0240726285714281,
+        "maxMs": 1.0942460937499998
+      },
+      "findAll": {
+        "medianMs": 3.2020265454545385,
+        "minMs": 3.184852272727271,
+        "maxMs": 3.269689363636365
+      },
+      "count": {
+        "medianMs": 2.9813576666666584,
+        "minMs": 2.9405729166666674,
+        "maxMs": 2.9913819999999967
+      },
+      "test": {
+        "medianMs": 0.00013044091427463986,
+        "minMs": 0.00012889584921503008,
+        "maxMs": 0.00013223977980292558
+      },
+      "forEach": {
+        "medianMs": 3.1493889166666804,
+        "minMs": 3.043871499999985,
+        "maxMs": 3.204731090909098
+      },
+      "stats": {
+        "states": 7093,
+        "alphabetSize": 26,
+        "backend": "sparse",
+        "transitionBytes": 0,
+        "outputBytes": 33172
+      }
+    }
+  ]
+}
