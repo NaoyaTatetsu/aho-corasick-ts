@@ -59,6 +59,7 @@ new AhoCorasick(new Set(['ab', 'bc'])).count('abc'); // 2
 | 件数だけ | `count` — 結果オブジェクトを一切作らない |
 | 全一致を順に処理したい | `forEach` — 結果配列を作らずコールバックで通知 |
 | 全一致を配列で受け取りたい | `findAll` — 扱いやすいが一致1件ごとにオブジェクトを生成 |
+| 一致箇所を置換した文字列 | `replace` — 重なりのない一致だけを置換 |
 
 ```ts
 const ng = new AhoCorasick(['詐欺', '当選', '無料']);
@@ -86,58 +87,55 @@ for (const { patternIndex, start, end } of ng.findAll(text)) {
 
 `patterns`は入力をコピーした読み取り専用の配列です。
 
-### 重なりを解消する
+### 重なりのない一致だけを取る
 
-`findAll`は重なった一致をすべて返すので、ハイライトや置換に使うには重なりのない集合へ絞る必要があります。**結果は終了位置の昇順で届くため、素直に前から貪欲に選ぶと短いキーワードが優先されてしまいます。**
+既定（`matchKind: 'all'`）は重なった一致もすべて返します。ハイライトや置換のように区間が重なってはいけない用途では、`matchKind`で非重複の選択規則を指定します。
+
+- `leftmost-longest` — 開始位置が最も左の一致を取り、同じ位置なら最長のパターンを選ぶ
+- `leftmost-first` — 開始位置が最も左の一致を取り、同じ位置なら辞書で先に登録したパターンを選ぶ
+
+一致を1件選ぶと、その終了位置から次の探索を再開します。
 
 ```ts
-const kw = new AhoCorasick(['東京', '東京大学', '大学']);
+const kw = ['東京', '東京大学', '大学'];
 const src = '東京大学と東京の大学';
 
-// 素直な貪欲法は「東京」を先に取ってしまう
-// -> 東京, 大学, 東京, 大学
-```
+new AhoCorasick(kw).findAll(src).length;   // 5（重なりを含む全件）
 
-左から最長を優先する（leftmost-longest）には、開始位置の昇順・長さの降順に並べ替えてから選びます。
-
-```ts
-function leftmostLongest(ac: AhoCorasick, text: string) {
-  const all = ac.findAll(text);
-  all.sort((a, b) => a.start - b.start || (b.end - b.start) - (a.end - a.start));
-  const picked = [];
-  let lastEnd = 0;
-  for (const m of all) {
-    if (m.start >= lastEnd) {
-      picked.push(m);
-      lastEnd = m.end;
-    }
-  }
-  return picked;
-}
-
-leftmostLongest(kw, src);
+new AhoCorasick(kw, { matchKind: 'leftmost-longest' }).findAll(src);
 // 東京大学@0, 東京@5, 大学@8
+
+new AhoCorasick(kw, { matchKind: 'leftmost-first' }).findAll(src);
+// 東京@0, 大学@2, 東京@5, 大学@8   ← 同じ位置では辞書で先の '東京' が勝つ
 ```
 
-これを使えばマスクやハイライトが素直に書けます。
+`findAll`・`forEach`・`count`は同じ規則に従います。`test`は一致の有無しか返さないため、どの`matchKind`でも結果は変わりません。非重複なので結果の順序は開始位置の昇順です。
+
+### 置換する
+
+`replace`は重なりのない一致を置換します。置換内容は3通りで指定できます。
 
 ```ts
-function replaceMatches(ac: AhoCorasick, text: string, wrap: (hit: string) => string) {
-  let out = '';
-  let cursor = 0;
-  for (const m of leftmostLongest(ac, text)) {
-    out += text.slice(cursor, m.start) + wrap(text.slice(m.start, m.end));
-    cursor = m.end;
-  }
-  return out + text.slice(cursor);
-}
+const ng = new AhoCorasick(['詐欺', '無料', '無料ギフト']);
 
-replaceMatches(kw, src, hit => `<mark>${hit}</mark>`);
-// <mark>東京大学</mark>と<mark>東京</mark>の<mark>大学</mark>
+// 固定文字列
+ng.replace('無料ギフトの案内、詐欺に注意', '＊');
+// ＊の案内、＊に注意
 
-const ng2 = new AhoCorasick(['詐欺', '無料', '無料ギフト']);
-replaceMatches(ng2, '無料ギフトの案内、詐欺に注意', hit => '＊'.repeat(hit.length));
-// ＊＊＊＊＊の案内、＊＊に注意
+// パターンごと（辞書と同じ長さの配列。長さが違えば RangeError）
+ng.replace('無料ギフトの案内', ['〔詐欺〕', '〔無料〕', '〔無料ギフト〕']);
+// 〔無料ギフト〕の案内
+
+// 一致ごとに組み立てる
+ng.replace('無料ギフトの案内', (patternIndex, start, end) => '＊'.repeat(end - start));
+// ＊＊＊＊＊の案内
+```
+
+`matchKind: 'all'`のインスタンスは重なった一致を同時に置換できないため、`replace`だけは`leftmost-longest`として選択します。非重複の`matchKind`を指定している場合はその規則に従います。
+
+```ts
+new AhoCorasick(['ab', 'abc']).replace('abcab', '*');                                    // '**'
+new AhoCorasick(['ab', 'abc'], { matchKind: 'leftmost-first' }).replace('abcab', '*');   // '*c*'
 ```
 
 ### パターンごとに集計する
@@ -166,14 +164,55 @@ ng.forEach('無料で当選、詐欺に注意', (patternIndex, start, end) => {
 
 ### 大文字小文字を無視する
 
-大文字小文字は区別します。無視したい場合は、辞書とテキストの両方を同じ方法で正規化してください。
+`caseInsensitive`を指定すると、辞書とテキストを同じ規則で畳み込んでから照合します。**返る位置は元のテキストに対するもの**で、`patterns`も渡した文字列がそのまま残ります。
 
 ```ts
-const ci = new AhoCorasick(['error', 'warning'].map(p => p.toLowerCase()));
-ci.test('Fatal ERROR occurred'.toLowerCase());  // true
+const ci = new AhoCorasick(['ERROR', 'Warning'], { caseInsensitive: true });
+
+ci.findAll('Fatal error and WARNING');
+// [{ patternIndex: 0, start: 6, end: 11 }, { patternIndex: 1, start: 16, end: 23 }]
+ci.patterns;   // ['ERROR', 'Warning']（畳み込み後の文字列ではない）
 ```
 
-ただし返る位置は正規化後の文字列に対するものです。ASCIIや日本語では`toLowerCase()`が長さを変えないので元のテキストにもそのまま使えますが、一部のUnicode文字は長さが変わるため（`'İ'.toLowerCase().length === 2`）オフセットがずれます。元テキストの位置が必要でUnicode全般を扱うなら、正規化後の文字列を保持して`slice`してください。
+畳み込みはUTF-16コード単位ごとに`toLowerCase()`を適用し、**結果が1コード単位になる場合だけ**採用します。ASCII・アクセント付きラテン文字・ギリシャ文字・キリル文字・全角英字などが対象です。長さの変わる変換（`'İ'.toLowerCase()`は2コード単位、`'ß'.toUpperCase()`は`'SS'`）はオフセット計算を壊すため採用しません。したがって次は一致しません。
+
+```ts
+new AhoCorasick(['ss'], { caseInsensitive: true }).test('ß');   // false
+new AhoCorasick(['İ'], { caseInsensitive: true }).test('i');    // false
+new AhoCorasick(['Σ'], { caseInsensitive: true }).test('ς');    // false（語末シグマは単独の小文字を持たない）
+new AhoCorasick(['Σ'], { caseInsensitive: true }).test('σ');    // true
+```
+
+畳み込みはコード単位から列番号への変換表に吸収されるため、走査は大文字小文字を区別する場合とまったく同じループを通り、1文字あたりの追加コストはありません。変換表は1プロセスで1回だけ構築します（約4ms、128 KiB）。
+
+### 単語単位でマッチする
+
+`wholeWords`を指定すると、前後が単語構成文字である一致を捨てます。
+
+```ts
+const w = new AhoCorasick(['cat'], { wholeWords: true });
+
+w.findAll('cat cats _cat (cat)').map(m => m.start);   // [0, 15]
+```
+
+単語構成文字の定義は`wordBoundary`で選びます。
+
+| 値 | 単語構成文字 |
+| --- | --- |
+| `unicode`（既定） | `\p{L}`・`\p{N}`・`\p{M}`・`_` |
+| `ascii` | `[A-Za-z0-9_]` |
+
+`unicode`は日本語や結合文字も単語構成文字として扱います。`ascii`はASCII以外をすべて区切りとみなすため、日本語に埋め込まれた英単語を拾えます。
+
+```ts
+new AhoCorasick(['cat'], { wholeWords: true }).test('猫cat猫');                         // false
+new AhoCorasick(['cat'], { wholeWords: true, wordBoundary: 'ascii' }).test('猫cat猫');   // true
+
+// 結合文字を途中で切る一致も除外される
+new AhoCorasick(['e'], { wholeWords: true }).test('e\u0301');   // false（é の分解形）
+```
+
+前後の判定はコード単位ではなくコードポイント単位で行うため、サロゲートペアの片側だけを見て誤判定することはありません。
 
 ### 遷移表のメモリを制限する
 
@@ -187,13 +226,16 @@ tuned.stats;
 
 ### TypeScriptの型
 
-`Match`・`MatchCallback`・`Options`をエクスポートしています。
+`Match`・`MatchCallback`・`Options`・`MatchKind`・`WordBoundary`・`Replacement`をエクスポートしています。
 
 ```ts
 import { AhoCorasick } from 'aho-corasick-ts';
-import type { Match, MatchCallback, Options } from 'aho-corasick-ts';
+import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundary } from 'aho-corasick-ts';
 
-const options: Options = { maxDenseBytes: 8 * 1024 * 1024 };
+const kind: MatchKind = 'leftmost-longest';
+const boundary: WordBoundary = 'unicode';
+const mask: Replacement = (patternIndex, start, end) => '*'.repeat(end - start);
+const options: Options = { maxDenseBytes: 8 * 1024 * 1024, matchKind: kind, wordBoundary: boundary };
 const matcher = new AhoCorasick(['he', 'she'], options);
 const matches: Match[] = matcher.findAll('ushers');
 
@@ -206,21 +248,32 @@ matcher.forEach('ushers', onMatch);
 ### 向かない用途
 
 - パターンが呼び出しごとに変わる場合。構築コストを回収できません。
-- 文字クラス・繰り返し・単語境界などの柔軟な照合。正規表現を使ってください。
+- 文字クラス・繰り返し・後方参照などの柔軟な照合。正規表現を使ってください（単語境界は`wholeWords`で扱えます）。
 - 構築後の辞書の追加・削除。インスタンスは不変で、作り直しが必要です。
 - チャンクをまたぐストリーム検索。状態は各呼び出し内に閉じています。
 
 ## 開発
 
-Node.js 22.12以降、pnpm 11.9.0、TypeScript 7.x（lockfileで7.0.2を固定）。
+Node.js 22.12以降、pnpm 11.9.0、TypeScript 7.x（lockfileで7.0.2を固定）。lintとフォーマットはBiome 2.5.12です。
 
 ```sh
 pnpm install --frozen-lockfile
+pnpm lint        # biome check .（lint + フォーマット検査）
+pnpm lint:fix    # biome check --write .
 pnpm typecheck
 pnpm test
 pnpm bench
 pnpm pack
 ```
+
+CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。
+
+Biomeの設定は[biome.jsonc](biome.jsonc)にあり、既定から外しているのは次の4点です（理由は設定ファイル内にコメントとして記載）。
+
+- `style/noNonNullAssertion`を無効化 — `noUncheckedIndexedAccess`によりTypedArrayの読み出しには`!`が必要で、ルールの修正案`?.`は1文字ごとのループに実行時チェックを入れてしまいます。
+- `suspicious/noConfusingVoidType`を無効化 — `MatchCallback`の`void | boolean`を`undefined | boolean`にすると、戻り値型を明示的に`void`と宣言したハンドラを渡せなくなり、公開APIの破壊的変更になります。
+- `correctness/noUnusedPrivateClassMembers`を無効化 — Biome 2.5.12は`const { … } = this`でのみ読まれるフィールドを追えず、走査ループが巻き上げている4つのフィールドを未使用と誤検知します。同じ検査はtsconfigの`noUnusedLocals`が行っており、そちらは分割代入を正しく追えます。
+- `bench/baseline.ts`・`bench/baseline.mjs`を対象外 — `pnpm bench --compare`が過去の実装を同一のコードで測るための凍結スナップショットです。
 
 `pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。スコープなしパッケージなので`npm publish`でそのまま公開できます。
 
@@ -229,16 +282,28 @@ pnpm pack
 | API | 動作 |
 | --- | --- |
 | `new AhoCorasick(patterns, options?)` | `Iterable<string>`から辞書を構築 |
-| `findAll(text): Match[]` | 重なりを含む全件のID・開始・終了位置 |
+| `findAll(text): Match[]` | 報告対象の全一致のID・開始・終了位置 |
 | `forEach(text, callback): void` | 結果配列を生成せず全件を通知 |
-| `count(text): number` | 重なりと重複パターンを含む一致数 |
+| `count(text): number` | 報告対象の一致数 |
 | `test(text): boolean` | 一致の有無 |
+| `replace(text, replacement): string` | 重なりのない一致を置換した文字列 |
 | `patterns` | 入力をコピーした読み取り専用辞書 |
 | `stats` | 状態数、文字種類数、backend、遷移表バイト数、出力索引バイト数 |
 
-- 大文字小文字を区別し、Unicode正規化や単語境界の判定はしません。
+| Option | 既定 | 動作 |
+| --- | --- | --- |
+| `maxDenseBytes` | `67108864` | 密な遷移表に使う上限バイト数。`0`で疎な表現を強制 |
+| `matchKind` | `'all'` | `'all'`は重なりを含む全件、`'leftmost-first'`・`'leftmost-longest'`は非重複 |
+| `caseInsensitive` | `false` | コード単位ごとに小文字へ畳み込んで照合 |
+| `wholeWords` | `false` | 前後が単語構成文字の一致を捨てる |
+| `wordBoundary` | `'unicode'` | `wholeWords`の単語構成文字の定義（`'unicode'`・`'ascii'`） |
+
+- 既定では大文字小文字を区別します。Unicode正規化は行いません（`caseInsensitive`と`wholeWords`は上記のとおり）。
+- `matchKind`・`caseInsensitive`・`wholeWords`はすべて既定のままなら走査に追加コストを持ち込みません。既定値以外は`RangeError`です。
 - 位置はJavaScriptの`String.slice`と同じUTF-16コード単位です。`end`は排他的です。日本語・絵文字・孤立サロゲート・NULを扱えます。
-- 順序は終了位置の昇順、同じ終了位置では長いパターンを優先し、同一パターンの重複は入力順です。
+- `matchKind: 'all'`の順序は終了位置の昇順、同じ終了位置では長いパターンを優先し、同一パターンの重複は入力順です。非重複の`matchKind`では開始位置の昇順で、同じ開始位置の優劣は`matchKind`が決め、同一パターンの重複は最小のIDを返します。
+- 非重複の選択は一致を確定するたびに終了位置から走査を再開するため、最悪計算量は`O(text.length × 最長パターン長)`です。現在の状態の深さから「次の一致が始まりうる最小位置」を求めて先読みを打ち切るので、実測ではテキスト長に対してほぼ線形です。
+- `replace`は`matchKind: 'all'`のとき`leftmost-longest`として選択します。置換配列の長さが辞書と違えば`RangeError`、置換が文字列・配列・関数のいずれでもなければ`TypeError`です。
 - 空の辞書は許可し、空文字パターンは`RangeError`、文字列以外のパターンは`TypeError`です。
 - `forEach`はcallbackが厳密に`false`を返すと終了します。callbackの例外は呼び出し元へ伝播します。
 - 検索状態は各呼び出し内にあり、callbackから再帰的に検索できます。ストリーム間の状態維持・動的な辞書更新は提供しません。
@@ -256,11 +321,11 @@ const matcher = new AhoCorasick(['東京', '京都'], {
 console.log(matcher.stats);
 ```
 
-この予算は総メモリ制限ではありません。構築中のTrie、出力ID、失敗リンク、256 KiBの文字マップなどは別途必要です。`transitionBytes`はDFAの遷移表のみを計上し、疎な表現では0です。
+この予算は総メモリ制限ではありません。構築中のTrie、出力ID、失敗リンク、状態ごとの深さ（非重複選択の先読み打ち切りに使用）、256 KiBの文字マップなどは別途必要です。`caseInsensitive`を使うと、これに1プロセス共有の128 KiBの畳み込み表が加わります。`transitionBytes`はDFAの遷移表のみを計上し、疎な表現では0です。
 
 一致した状態から報告するパターンIDは、接尾辞リンクを辿る代わりに状態ごとの連続領域へ平坦化した索引（CSR形式）から読み出します。走査は1状態あたり1回の範囲読み出しで済み、出力配列の間接参照とリンクの辿り直しがなくなります。継承分は複製するため、全状態の合計が4Mi件（16 MiB）を超える辞書では索引を作らず、従来の接尾辞リンク走査に戻します。`outputBytes`がこの索引の実バイト数で、上限を超えた場合は0です。長い接尾辞の連鎖を大量に含む辞書（例: 3,000件すべてが同一文字列の接尾辞）が該当します。
 
-テキスト長をn、一致数をzとすると、全件検索はO(n + z)、`count`は事前集計した状態別件数を使うためO(n)です。平坦化した出力索引は状態ごとの一致件数の総和に比例するメモリを使います。DFA構築と遷移表は状態数×アルファベット数に比例する追加コストがあります。構築中の疎な失敗リンク探索では追加の走査が発生します。`findAll`はO(z)の結果メモリが必要です。大量一致時は`count`や`forEach`を利用してください。
+テキスト長をn、一致数をzとすると、全件検索はO(n + z)、`count`は事前集計した状態別件数を使うためO(n)です。`matchKind`で非重複を選ぶか`wholeWords`を使う場合、`count`はこの事前集計を使えず一致を1件ずつ選別します。平坦化した出力索引は状態ごとの一致件数の総和に比例するメモリを使います。DFA構築と遷移表は状態数×アルファベット数に比例する追加コストがあります。構築中の疎な失敗リンク探索では追加の走査が発生します。`findAll`はO(z)の結果メモリが必要です。大量一致時は`count`や`forEach`を利用してください。
 
 ## ベンチマーク
 
