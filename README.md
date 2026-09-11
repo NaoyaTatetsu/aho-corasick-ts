@@ -266,7 +266,7 @@ pnpm bench
 pnpm pack
 ```
 
-CIは`lint` → `typecheck` → `test` → `pack`をNode 22と24で実行します。
+CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。
 
 Biomeの設定は[biome.jsonc](biome.jsonc)にあり、既定から外しているのは次の4点です（理由は設定ファイル内にコメントとして記載）。
 
