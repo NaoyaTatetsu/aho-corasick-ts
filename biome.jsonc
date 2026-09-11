@@ -1,0 +1,49 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+  "files": {
+    // bench/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte so
+    // `pnpm bench --compare` measures the same code it always did. It says "Do not edit".
+    "includes": ["src/**/*.ts", "test/**/*.mjs", "bench/run.mjs"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 2,
+    // Wide enough to keep the transition loops and the dense bench adapters on one line.
+    "lineWidth": 200
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "arrowParentheses": "asNeeded",
+      "trailingCommas": "all"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "style": {
+        // tsconfig sets noUncheckedIndexedAccess, so every TypedArray read is T | undefined
+        // and needs an assertion. The rule's own fix is `?.`, which would put a runtime check
+        // in the per-character loops this library exists to keep tight.
+        "noNonNullAssertion": "off"
+      },
+      "correctness": {
+        // Biome 2.5.12 does not see fields that are only read through `const { … } = this`,
+        // which is how the scan loops hoist them, so it reports four live fields as dead.
+        // tsconfig's noUnusedLocals already reports genuinely unused private members and
+        // does follow that destructuring, so nothing is lost here. Recheck on the next bump.
+        "noUnusedPrivateClassMembers": "off"
+      },
+      "suspicious": {
+        // MatchCallback returns `void | boolean`. Narrowing it to `undefined | boolean` as the
+        // rule suggests rejects any handler declared with an explicit `void` return type,
+        // which is a breaking change to the public API.
+        "noConfusingVoidType": "off"
+      }
+    }
+  },
+  // bench/run.mjs groups its imports by role (node builtins, the local build, competitors).
+  "assist": { "actions": { "source": { "organizeImports": "off" } } }
+}

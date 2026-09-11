@@ -32,13 +32,16 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
     "test": "pnpm build && node --test test/*.test.mjs",
     "bench": "pnpm build && node bench/run.mjs",
     "prepack": "pnpm build",
-    "prepublishOnly": "pnpm typecheck && pnpm test"
+    "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test"
   },
   "license": "MIT",
   "devDependencies": {
+    "@biomejs/biome": "2.5.12",
     "@monyone/aho-corasick": "^1.0.0",
     "@stll/aho-corasick": "1.0.4",
     "ahocorasick": "1.0.2",

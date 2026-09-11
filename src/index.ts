@@ -256,8 +256,8 @@ function buildDenseTable({ edges }: Trie, { failure, bfsOrder }: Failures, rowWi
  */
 function buildPrefilter(rootCodes: readonly number[]): RegExp | undefined {
   if (rootCodes.length === 0 || rootCodes.length > PREFILTER_MAX_ROOTS) return undefined;
-  const escaped = rootCodes.map(code => '\\u' + code.toString(16).padStart(4, '0'));
-  return new RegExp('[' + escaped.join('') + ']');
+  const escaped = rootCodes.map(code => `\\u${code.toString(16).padStart(4, '0')}`);
+  return new RegExp(`[${escaped.join('')}]`);
 }
 
 /**
@@ -380,7 +380,9 @@ export class AhoCorasick {
     // Selecting matches or rejecting them at word boundaries invalidates the per-state totals.
     if (this.matchKind !== 'all' || this.wholeWords) {
       let selected = 0;
-      this.forEach(text, () => { selected++; });
+      this.forEach(text, () => {
+        selected++;
+      });
       return selected;
     }
     if (this.scanWithIndexOf) {
@@ -427,7 +429,10 @@ export class AhoCorasick {
     // Which matches are selected cannot change whether one exists, but rejecting them can.
     if (this.wholeWords) {
       let found = false;
-      this.forEach(text, () => { found = true; return false; });
+      this.forEach(text, () => {
+        found = true;
+        return false;
+      });
       return found;
     }
     if (this.scanWithIndexOf) {
@@ -470,7 +475,9 @@ export class AhoCorasick {
     // every other configuration collects the callbacks forEach already emits in order.
     if (!table || !outputRuns || this.scanWithIndexOf || this.matchKind !== 'all' || this.wholeWords) {
       const collected: Match[] = [];
-      this.forEach(text, (patternIndex, start, end) => { collected.push({ patternIndex, start, end }); });
+      this.forEach(text, (patternIndex, start, end) => {
+        collected.push({ patternIndex, start, end });
+      });
       return collected;
     }
     const begin = this.scanStart(text);
@@ -496,12 +503,13 @@ export class AhoCorasick {
 
   /** Visits the reported matches in order; callback returning false stops the scan. */
   forEach(text: string, callback: MatchCallback): void {
-    if (this.matchKind !== 'all') return this.forEachLeftmost(text, callback, this.preferLongest);
-    if (this.wholeWords) {
-      return this.forEachOverlapping(text, (patternIndex, start, end) =>
-        this.atWordBoundary(text, start, end) ? callback(patternIndex, start, end) : undefined);
+    if (this.matchKind !== 'all') {
+      this.forEachLeftmost(text, callback, this.preferLongest);
+    } else if (this.wholeWords) {
+      this.forEachOverlapping(text, (patternIndex, start, end) => (this.atWordBoundary(text, start, end) ? callback(patternIndex, start, end) : undefined));
+    } else {
+      this.forEachOverlapping(text, callback);
     }
-    return this.forEachOverlapping(text, callback);
   }
 
   /**
@@ -509,19 +517,24 @@ export class AhoCorasick {
    * of its results, so replacement selects leftmost-longest there.
    */
   replace(text: string, replacement: Replacement): string {
+    // Resolving which form of replacement this is once keeps it out of the per-match path.
     const byIndex = Array.isArray(replacement) ? (replacement as readonly string[]) : undefined;
+    let substitute: (patternIndex: number, start: number, end: number) => string;
     if (byIndex) {
       if (byIndex.length !== this.patterns.length) throw new RangeError('A replacement array needs one entry per pattern');
-    } else if (typeof replacement !== 'string' && typeof replacement !== 'function') {
+      substitute = patternIndex => byIndex[patternIndex]!;
+    } else if (typeof replacement === 'string') {
+      substitute = () => replacement;
+    } else if (typeof replacement === 'function') {
+      substitute = replacement;
+    } else {
       throw new TypeError('Replacement must be a string, an array of strings or a function');
     }
     const parts: string[] = [];
     let copied = 0;
     const emit: MatchCallback = (patternIndex, start, end) => {
       if (start > copied) parts.push(text.slice(copied, start));
-      parts.push(byIndex ? byIndex[patternIndex]!
-        : typeof replacement === 'function' ? replacement(patternIndex, start, end)
-        : (replacement as string));
+      parts.push(substitute(patternIndex, start, end));
       copied = end;
     };
     if (this.matchKind === 'all') this.forEachLeftmost(text, emit, true);
@@ -538,7 +551,10 @@ export class AhoCorasick {
    * a branch or an indirect call per character.
    */
   private forEachOverlapping(text: string, callback: MatchCallback): void {
-    if (this.scanWithIndexOf) return this.forEachViaIndexOf(text, callback);
+    if (this.scanWithIndexOf) {
+      this.forEachViaIndexOf(text, callback);
+      return;
+    }
     const begin = this.scanStart(text);
     if (begin < 0) return;
     const { table, alphabet, rowWidth, outputCount, outputRuns, patterns } = this;
