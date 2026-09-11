@@ -1,13 +1,13 @@
-# @naoya-tatetsu/aho-corasick
+# aho-corasick-ts
 
 TypeScript 7で実装した、実行時依存ゼロのAho–Corasick文字列検索ライブラリです。複数のキーワードを一度登録すれば、テキスト1回の走査で全キーワードの出現位置をまとめて取得できます。キーワードが何件あっても走査コストはほぼ変わりません。
 
 ## インストール
 
 ```sh
-pnpm add @naoya-tatetsu/aho-corasick
-# npm install @naoya-tatetsu/aho-corasick
-# yarn add @naoya-tatetsu/aho-corasick
+pnpm add aho-corasick-ts
+# npm install aho-corasick-ts
+# yarn add aho-corasick-ts
 ```
 
 Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.12以降の`require(ESM)`からも読み込めます（古いNode向けのCJSビルドは含みません）。実行時依存はゼロで、Node固有のAPIも使っていないため、ブラウザのESMとしても利用できます（ブラウザでの性能検証は未実施です）。
@@ -19,7 +19,7 @@ Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.1
 辞書を一度構築し、異なるテキストに何度でも適用します。
 
 ```ts
-import { AhoCorasick } from '@naoya-tatetsu/aho-corasick';
+import { AhoCorasick } from 'aho-corasick-ts';
 
 const matcher = new AhoCorasick(['he', 'she', 'hers']);
 
@@ -155,7 +155,7 @@ ng.forEach('無料無料と当選', patternIndex => { tally[patternIndex]++; });
 コールバックが厳密に`false`を返すと、その時点で走査を終了します。最初のN件だけ欲しい場合に、テキスト全体を走査せずに済みます。
 
 ```ts
-import type { Match } from '@naoya-tatetsu/aho-corasick';
+import type { Match } from 'aho-corasick-ts';
 
 const found: Match[] = [];
 ng.forEach('無料で当選、詐欺に注意', (patternIndex, start, end) => {
@@ -190,8 +190,8 @@ tuned.stats;
 `Match`・`MatchCallback`・`Options`をエクスポートしています。
 
 ```ts
-import { AhoCorasick } from '@naoya-tatetsu/aho-corasick';
-import type { Match, MatchCallback, Options } from '@naoya-tatetsu/aho-corasick';
+import { AhoCorasick } from 'aho-corasick-ts';
+import type { Match, MatchCallback, Options } from 'aho-corasick-ts';
 
 const options: Options = { maxDenseBytes: 8 * 1024 * 1024 };
 const matcher = new AhoCorasick(['he', 'she'], options);
@@ -222,7 +222,7 @@ pnpm bench
 pnpm pack
 ```
 
-`pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。scopedパッケージのため`publishConfig.access`に`public`を設定済みで、`npm publish`で公開できます（`@naoya-tatetsu`スコープが公開アカウントと一致している必要があります）。
+`pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。スコープなしパッケージなので`npm publish`でそのまま公開できます。
 
 ## APIと一致の仕様
 

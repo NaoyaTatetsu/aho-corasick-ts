@@ -1,15 +1,15 @@
 {
-  "name": "@naoya-tatetsu/aho-corasick",
+  "name": "aho-corasick-ts",
   "version": "0.1.0",
   "description": "Fast, dependency-free Aho-Corasick matching with adaptive typed-array transitions",
   "author": "Naoya Tatetsu",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NaoyaTatetsu/aho-corasick.git"
+    "url": "git+https://github.com/NaoyaTatetsu/aho-corasick-ts.git"
   },
-  "homepage": "https://github.com/NaoyaTatetsu/aho-corasick#readme",
+  "homepage": "https://github.com/NaoyaTatetsu/aho-corasick-ts#readme",
   "bugs": {
-    "url": "https://github.com/NaoyaTatetsu/aho-corasick/issues"
+    "url": "https://github.com/NaoyaTatetsu/aho-corasick-ts/issues"
   },
   "type": "module",
   "main": "./dist/index.js",
@@ -24,9 +24,6 @@
     "dist",
     "src"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "sideEffects": false,
   "engines": {
     "node": ">=22.12.0"
