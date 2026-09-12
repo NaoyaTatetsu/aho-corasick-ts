@@ -1,6 +1,8 @@
-# aho-corasick-ts
+# aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/aho-corasick-ts)](https://www.npmjs.com/package/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](../../LICENSE)
 
-実行時依存ゼロの、TypeScript向けAho–Corasick文字列検索ライブラリです。複数のキーワードを一度登録すれば、テキスト1回の走査で全キーワードの出現位置をまとめて取得できます。キーワードが何件あっても走査コストはほぼ変わりません。
+**aho-corasick-ts**は、実行時依存ゼロのTypeScript向け[Aho–Corasick](https://ja.wikipedia.org/wiki/エイホ–コラシック法)文字列検索ライブラリです。
+
+複数のキーワードを一度登録すれば、テキスト1回の走査で全キーワードの出現位置をまとめて取得できます。キーワードが何件あっても走査コストはほぼ変わりません。
 
 English documentation is at [README.md](../../README.md).
 

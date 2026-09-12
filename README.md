@@ -1,6 +1,8 @@
-# aho-corasick-ts
+# aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/aho-corasick-ts)](https://www.npmjs.com/package/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-Fast, dependency-free Aho–Corasick matching for TypeScript. Register any number of keywords once, then find every occurrence of all of them in a single pass over the text. Adding keywords barely changes the cost of a scan.
+**aho-corasick-ts** is a dependency-free [Aho–Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) string matcher for TypeScript.
+
+Register any number of keywords once, then find every occurrence of all of them in a single pass over the text. Adding keywords barely changes the cost of a scan.
 
 日本語のドキュメントは [docs/ja/README.md](docs/ja/README.md) にあります。
 
