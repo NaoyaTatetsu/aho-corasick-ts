@@ -1,4 +1,4 @@
-/** Frozen snapshot of src/index.ts before the flattened output index, used by `pnpm bench --compare`. Do not edit. */
+/** Frozen snapshot of src/index.ts before the flattened output index, used by `pnpm benchmark --compare`. Do not edit. */
 /** Immutable, case-sensitive multi-pattern matcher. Duplicate patterns retain their IDs. */
 export class AhoCorasick {
     patterns;

@@ -10,6 +10,7 @@ on:
     types: [opened, ready_for_review, synchronize]
     paths:
       - ".github/workflows/test.yml"
+      - "benchmark/**"
       - "src/**"
       - "test/**"
       - "biome.jsonc"

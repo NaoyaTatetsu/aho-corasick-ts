@@ -262,7 +262,7 @@ pnpm lint        # biome check .（lint + フォーマット検査）
 pnpm lint:fix    # biome check --write .
 pnpm typecheck
 pnpm test
-pnpm bench
+pnpm benchmark
 pnpm pack
 ```
 
@@ -273,7 +273,7 @@ Biomeの設定は[biome.jsonc](biome.jsonc)にあり、既定から外してい�
 - `style/noNonNullAssertion`を無効化 — `noUncheckedIndexedAccess`によりTypedArrayの読み出しには`!`が必要で、ルールの修正案`?.`は1文字ごとのループに実行時チェックを入れてしまいます。
 - `suspicious/noConfusingVoidType`を無効化 — `MatchCallback`の`void | boolean`を`undefined | boolean`にすると、戻り値型を明示的に`void`と宣言したハンドラを渡せなくなり、公開APIの破壊的変更になります。
 - `correctness/noUnusedPrivateClassMembers`を無効化 — Biome 2.5.12は`const { … } = this`でのみ読まれるフィールドを追えず、走査ループが巻き上げている4つのフィールドを未使用と誤検知します。同じ検査はtsconfigの`noUnusedLocals`が行っており、そちらは分割代入を正しく追えます。
-- `bench/baseline.ts`・`bench/baseline.mjs`を対象外 — `pnpm bench --compare`が過去の実装を同一のコードで測るための凍結スナップショットです。
+- `benchmark/baseline.ts`・`benchmark/baseline.mjs`を対象外 — `pnpm benchmark --compare`が過去の実装を同一のコードで測るための凍結スナップショットです。
 
 `pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。スコープなしパッケージなので`npm publish`でそのまま公開できます。
 
@@ -329,14 +329,14 @@ console.log(matcher.stats);
 
 ## ベンチマーク
 
-`pnpm bench`は固定seedの6種類の合成入力を使い、構築・全件検索・存在判定を分けて計測します。件数専用APIは別欄です。比較対象は`ahocorasick`、`modern-ahocorasick`、`@monyone/aho-corasick`（通常版とfast版）、Rustバインディングの`@stll/aho-corasick`です。
+`pnpm benchmark`は固定seedの6種類の合成入力を使い、構築・全件検索・存在判定を分けて計測します。件数専用APIは別欄です。比較対象は`ahocorasick`、`modern-ahocorasick`、`@monyone/aho-corasick`（通常版とfast版）、Rustバインディングの`@stll/aho-corasick`です。
 
 各組み合わせを別プロセスで実行し、独立した`String.indexOf`による正解と全件のID・位置を比較します。ウォームアップ60ms以上、7サンプル×35ms以上の中央値・最小値・最大値を記録します。正規化処理は測定外ですが、各API固有の結果生成は含みます。特に`ahocorasick`系は同じ終了位置の結果をまとめるため、全件を個別オブジェクトにするAPIとは割り当て量が異なります。
 
 比較ライブラリの異常終了・不一致・タイムアウトは`skipped`に記録します。各子プロセスのJSヒープ上限は512 MiB、時間上限は30秒です。ネイティブメモリはこの上限の対象外です。本体の失敗はベンチマーク全体を失敗させます。
 
-測定結果の要約は[bench/RESULTS.md](bench/RESULTS.md)にあります。比較したJS/TS実装には6条件すべてで勝っていますが、`small-dictionary`ではRustバインディングの`@stll/aho-corasick`が速く、一致が密な`suffix-heavy`では終了位置単位で結果をまとめる`ahocorasick`のほうが`findAll`の数値が小さくなります。
+測定結果の要約は[benchmark/RESULTS.md](benchmark/RESULTS.md)にあります。比較したJS/TS実装には6条件すべてで勝っていますが、`small-dictionary`ではRustバインディングの`@stll/aho-corasick`が速く、一致が密な`suffix-heavy`では終了位置単位で結果をまとめる`ahocorasick`のほうが`findAll`の数値が小さくなります。
 
-結果と環境、依存パッケージのバージョンは[bench/results.json](bench/results.json)に保存します。検索速度だけでなく構築時間も比較してください。合成入力・単一環境での結果であり、npm全体での最速を保証するものではありません。実データ、CPU、ランタイム、パターン数、一致密度によって順位は変わります。
+結果と環境、依存パッケージのバージョンは[benchmark/results.json](benchmark/results.json)に保存します。検索速度だけでなく構築時間も比較してください。合成入力・単一環境での結果であり、npm全体での最速を保証するものではありません。実データ、CPU、ランタイム、パターン数、一致密度によって順位は変わります。
 
 MIT License.
