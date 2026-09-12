@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
   "files": {
     // benchmark/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte
     // so `pnpm benchmark --compare` measures the same code it always did. Marked "Do not edit".
@@ -28,13 +28,6 @@
         // and needs an assertion. The rule's own fix is `?.`, which would put a runtime check
         // in the per-character loops this library exists to keep tight.
         "noNonNullAssertion": "off"
-      },
-      "correctness": {
-        // Biome 2.5.12 does not see fields that are only read through `const { … } = this`,
-        // which is how the scan loops hoist them, so it reports four live fields as dead.
-        // tsconfig's noUnusedLocals already reports genuinely unused private members and
-        // does follow that destructuring, so nothing is lost here. Recheck on the next bump.
-        "noUnusedPrivateClassMembers": "off"
       },
       "suspicious": {
         // MatchCallback returns `void | boolean`. Narrowing it to `undefined | boolean` as the
