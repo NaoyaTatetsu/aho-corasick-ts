@@ -38,6 +38,8 @@ Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外し�
 
 公開の認証はnpmのtrusted publishingで、ジョブがGitHubからOIDCトークンを受け取り、npmがそれを短命な資格情報と交換します。**このリポジトリに長期のnpmトークンは保存しません。** provenanceは自動で付与されます。公開後はコミットにタグを打ち、いま検査したCHANGELOGの節を本文としてGitHub Releaseを作成します。プレリリースの場合は`next` dist-tagで公開されるため、betaが`npm install`の既定になることはありません。
 
-リリース手順は、`pnpm version <patch|minor|major>`を実行し、CHANGELOGの`Unreleased`見出しを日付付きでそのバージョンに繰り下げたPRを作るだけです。**マージした時点で公開されます。**
+リリース手順は、`pnpm version <patch|minor|major> --no-git-tag-version`を実行し、CHANGELOGの`Unreleased`見出しを日付付きでそのバージョンに繰り下げたPRを作るだけです。**マージした時点で公開されます。**
+
+`--no-git-tag-version`は必須です。付けないとpnpm 12はバージョン変更をコミットし、ローカルにタグまで作ります。そのタグはブランチ上のコミットを指しており、`main`に載るコミットとは別物です。タグはワークフローがマージコミットに対して打ちます。
 
 **初回公開だけはこのワークフローを使えません。** npmのtrusted publishingはパッケージの設定ページで構成するもので、PyPIのpending publisherに相当する仕組みが無いため、パッケージが存在しないと信頼関係を結べません。0.1.0はローカルの`npm publish`で公開し、その後npmjs.comでこのリポジトリと`release.yml`をtrusted publisherとして登録すれば、以降のリリースはCIから実行されます。
