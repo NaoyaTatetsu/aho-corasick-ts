@@ -32,6 +32,6 @@ Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外し�
 
 リリースは[.github/workflows/release.yml](../../.github/workflows/release.yml)から行い、GitHub Releaseの公開をトリガーとします。認証はnpmのtrusted publishingで、ジョブがGitHubからOIDCトークンを受け取り、npmがそれを短命な資格情報と交換します。**このリポジトリに長期のnpmトークンは保存しません。** provenanceは自動で付与されます。リリースタグと`package.json`のバージョンが食い違う場合、ジョブは公開を拒否します。
 
-リリース手順は、`package.json`のバージョンを設定し、[CHANGELOG.md](../../CHANGELOG.md)の`Unreleased`見出しを日付付きでそのバージョンに繰り下げ、`v<version>`のタグでGitHub Releaseを公開する、の3つです。
+リリース手順は、`package.json`のバージョンを設定し、[CHANGELOG.md](../../CHANGELOG.md)の`Unreleased`見出しを日付付きでそのバージョンに繰り下げ、`v<version>`のタグでGitHub Releaseを公開する、の3つです。**タグをpushしただけでは公開されません** — ワークフローはタグではなくReleaseに反応します。プレリリースとして公開した場合は`next` dist-tagで公開されるため、betaが`npm install`の既定になることはありません。
 
 **初回公開だけはこのワークフローを使えません。** npmのtrusted publishingはパッケージの設定ページで構成するもので、PyPIのpending publisherに相当する仕組みが無いため、パッケージが存在しないと信頼関係を結べません。0.1.0はローカルの`npm publish`で公開し、その後npmjs.comでこのリポジトリと`release.yml`をtrusted publisherとして登録すれば、以降のリリースはCIから実行されます。

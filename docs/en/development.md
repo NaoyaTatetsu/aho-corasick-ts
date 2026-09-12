@@ -47,7 +47,9 @@ publish when the release tag disagrees with the version in `package.json`.
 
 To cut a release: set the version in `package.json`, move the `Unreleased` heading in
 [CHANGELOG.md](../../CHANGELOG.md) down to it with the date, then publish a GitHub Release tagged
-`v<version>`.
+`v<version>`. Pushing the tag on its own publishes nothing — the workflow reacts to the release,
+not to the tag. A release marked as a pre-release publishes under the `next` dist-tag, so a beta
+never becomes what `npm install` hands out.
 
 **The first publish cannot use this workflow.** npm's trusted publishing is configured on a
 package's settings page, and npm has no equivalent of PyPI's pending publisher, so the package has

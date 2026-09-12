@@ -35,4 +35,15 @@ jobs:
           fi
       # prepublishOnly runs lint, typecheck and tests, and prepack builds, so a broken
       # tree cannot reach the registry. Provenance is automatic under trusted publishing.
-      - run: npm publish
+      - name: Publish
+        env:
+          PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          set -euo pipefail
+          # `published` fires for pre-releases too, and npm publish defaults to the `latest`
+          # dist-tag, which would hand every `npm install` a beta. Pre-releases go to `next`.
+          if [ "${PRERELEASE}" = "true" ]; then
+            npm publish --tag next
+          else
+            npm publish
+          fi
