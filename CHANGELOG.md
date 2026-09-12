@@ -5,6 +5,14 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+## 0.1.1 — 2026-09-13
+
+### Documentation
+
+- The README said the package loads from `require(ESM)` on Node 22.12 and up, which is true but
+  incomplete: Node 22 prints an `ExperimentalWarning` when it does, and Node 24 and newer do not.
+  Both READMEs now say so. Measured across Node 22, 24 and 26 against the published package.
+
 ## 0.1.0 — 2026-09-13
 
 First release.

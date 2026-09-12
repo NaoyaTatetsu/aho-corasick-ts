@@ -14,7 +14,7 @@ pnpm add @naoya_tatetsu/aho-corasick-ts
 # yarn add @naoya_tatetsu/aho-corasick-ts
 ```
 
-Node.js 22.12 or newer. Ships ESM with type declarations, and loads from `require(ESM)` on 22.12 and up; there is no CJS build for older Node. It has no runtime dependencies and uses no Node-specific API, so it also works as ESM in the browser — though browser performance has not been measured.
+Node.js 22.12 or newer. Ships ESM with type declarations, and loads from `require(ESM)` on 22.12 and up — Node 22 prints an `ExperimentalWarning` when it does, Node 24 and newer do not. There is no CJS build for older Node. It has no runtime dependencies and uses no Node-specific API, so it also works as ESM in the browser — though browser performance has not been measured.
 
 ## Quick start
 
