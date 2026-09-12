@@ -8,7 +8,7 @@
 辞書を一度構築し、異なるテキストに何度でも適用します。
 
 ```ts
-import { AhoCorasick } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
 
 const matcher = new AhoCorasick(['he', 'she', 'hers']);
 
@@ -142,7 +142,7 @@ ng.forEach('無料無料と当選', patternIndex => { tally[patternIndex]++; });
 コールバックが厳密に`false`を返すと、その時点で走査を終了します。最初のN件だけ欲しい場合に、テキスト全体を走査せずに済みます。
 
 ```ts
-import type { Match } from 'aho-corasick-ts';
+import type { Match } from '@naoya_tatetsu/aho-corasick-ts';
 
 const found: Match[] = [];
 ng.forEach('無料で当選、詐欺に注意', (patternIndex, start, end) => {
@@ -218,8 +218,8 @@ tuned.stats;
 `Match`・`MatchCallback`・`Options`・`MatchKind`・`WordBoundary`・`Replacement`をエクスポートしています。
 
 ```ts
-import { AhoCorasick } from 'aho-corasick-ts';
-import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundary } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
+import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundary } from '@naoya_tatetsu/aho-corasick-ts';
 
 const kind: MatchKind = 'leftmost-longest';
 const boundary: WordBoundary = 'unicode';

@@ -1,6 +1,6 @@
-# aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/aho-corasick-ts)](https://www.npmjs.com/package/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+# @naoya_tatetsu/aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/@naoya_tatetsu/aho-corasick-ts)](https://www.npmjs.com/package/@naoya_tatetsu/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-**aho-corasick-ts** is a dependency-free [Aho–Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) string matcher for TypeScript.
+**@naoya_tatetsu/aho-corasick-ts** is a dependency-free [Aho–Corasick](https://en.wikipedia.org/wiki/Aho%E2%80%93Corasick_algorithm) string matcher for TypeScript.
 
 Register any number of keywords once, then find every occurrence of all of them in a single pass over the text. Adding keywords barely changes the cost of a scan.
 
@@ -9,9 +9,9 @@ Register any number of keywords once, then find every occurrence of all of them 
 ## Install
 
 ```sh
-pnpm add aho-corasick-ts
-# npm install aho-corasick-ts
-# yarn add aho-corasick-ts
+pnpm add @naoya_tatetsu/aho-corasick-ts
+# npm install @naoya_tatetsu/aho-corasick-ts
+# yarn add @naoya_tatetsu/aho-corasick-ts
 ```
 
 Node.js 22.12 or newer. Ships ESM with type declarations, and loads from `require(ESM)` on 22.12 and up; there is no CJS build for older Node. It has no runtime dependencies and uses no Node-specific API, so it also works as ESM in the browser — though browser performance has not been measured.
@@ -19,7 +19,7 @@ Node.js 22.12 or newer. Ships ESM with type declarations, and loads from `requir
 ## Quick start
 
 ```ts
-import { AhoCorasick } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
 
 const matcher = new AhoCorasick(['he', 'she', 'hers']);
 
