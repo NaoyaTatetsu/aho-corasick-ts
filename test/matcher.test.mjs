@@ -448,3 +448,35 @@ test('leftmost candidates settle on the path bound, not on the longest pattern',
     { patternIndex: 0, start: 3, end: 6 },
   ]);
 });
+test('sparse transitions and the suffix-link output walk combine', () => {
+  // 3000 suffixes push the flattened output index past its cap, and a zero byte budget
+  // forces the sparse backend. Every other test reaches one of those or the other.
+  const patterns = Array.from({ length: 3000 }, (_, i) => 'a'.repeat(i + 1));
+  // The 'b' is in no pattern, so the scan has to walk the failure links to recover.
+  const text = `${'a'.repeat(40)}b${'a'.repeat(20)}`;
+  const ac = new AhoCorasick(patterns, { maxDenseBytes: 0 });
+  assert.equal(ac.stats.backend, 'sparse');
+  assert.equal(ac.stats.outputBytes, 0);
+
+  const expected = oracle(patterns, text);
+  assert.deepEqual(ac.findAll(text), expected);
+  assert.equal(ac.count(text), expected.length);
+  assert.equal(ac.test(text), true);
+  const visited = [];
+  ac.forEach(text, (patternIndex, start, end) => {
+    visited.push({ patternIndex, start, end });
+  });
+  assert.deepEqual(visited, expected);
+  const partial = [];
+  ac.forEach(text, (patternIndex, start, end) => {
+    partial.push({ patternIndex, start, end });
+    return partial.length < 2;
+  });
+  assert.deepEqual(partial, expected.slice(0, 2));
+
+  // Leftmost selection walks the same links, from its own loop rather than forEach's.
+  for (const options of [{ matchKind: 'leftmost-first' }, { matchKind: 'leftmost-longest' }, { matchKind: 'leftmost-longest', wholeWords: true }]) {
+    const lm = new AhoCorasick(patterns, { ...options, maxDenseBytes: 0 });
+    assert.deepEqual(lm.findAll(text), selectOracle(patterns, text, options), JSON.stringify(options));
+  }
+});

@@ -11,11 +11,14 @@ pnpm lint        # biome check .（lint + フォーマット検査）
 pnpm lint:fix    # biome check --write .
 pnpm typecheck
 pnpm test
+pnpm coverage    # 同じテストをNode組み込みのカバレッジ計測付きで実行
 pnpm benchmark
 pnpm pack
 ```
 
-CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。
+CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。プルリクエストではさらにNode 24で1回だけカバレッジを計測し、結果をコメントとして投稿します。push のたびに増やさず、既存のコメントを更新します。
+
+カバレッジはテストが読み込む`dist/index.js`に対して計測されるため、行番号はコンパイル後のものです。`--experimental-test-coverage`に追加の依存は不要です。閾値（`--test-coverage-lines`など）も使えますが、整数しか受け付けないため現在は設定していません。
 
 Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外しているのは次の4点です（理由は設定ファイル内にコメントとして記載）。
 
