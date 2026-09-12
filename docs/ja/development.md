@@ -26,4 +26,12 @@ Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外し�
 - `suspicious/noConfusingVoidType`を無効化 — `MatchCallback`の`void | boolean`を`undefined | boolean`にすると、戻り値型を明示的に`void`と宣言したハンドラを渡せなくなり、公開APIの破壊的変更になります。
 - `benchmark/baseline.ts`・`benchmark/baseline.mjs`を対象外 — `pnpm benchmark --compare`が過去の実装を同一のコードで測るための凍結スナップショットです。
 
-`pnpm pack`でnpm配布用のtgzを生成します。まだnpmには公開していません。スコープなしパッケージなので`npm publish`でそのまま公開できます。
+## 公開
+
+`pnpm pack`は何も送信せずにnpm配布用のtgzを生成します。`prepack`がビルドし、`prepublishOnly`がlint・typecheck・testを実行するため、壊れた状態のままレジストリへ到達することはありません。
+
+リリースは[.github/workflows/release.yml](../../.github/workflows/release.yml)から行い、GitHub Releaseの公開をトリガーとします。認証はnpmのtrusted publishingで、ジョブがGitHubからOIDCトークンを受け取り、npmがそれを短命な資格情報と交換します。**このリポジトリに長期のnpmトークンは保存しません。** provenanceは自動で付与されます。リリースタグと`package.json`のバージョンが食い違う場合、ジョブは公開を拒否します。
+
+リリース手順は、`package.json`のバージョンを設定し、[CHANGELOG.md](../../CHANGELOG.md)の`Unreleased`見出しを日付付きでそのバージョンに繰り下げ、`v<version>`のタグでGitHub Releaseを公開する、の3つです。**タグをpushしただけでは公開されません** — ワークフローはタグではなくReleaseに反応します。プレリリースとして公開した場合は`next` dist-tagで公開されるため、betaが`npm install`の既定になることはありません。
+
+**初回公開だけはこのワークフローを使えません。** npmのtrusted publishingはパッケージの設定ページで構成するもので、PyPIのpending publisherに相当する仕組みが無いため、パッケージが存在しないと信頼関係を結べません。0.1.0はローカルの`npm publish`で公開し、その後npmjs.comでこのリポジトリと`release.yml`をtrusted publisherとして登録すれば、以降のリリースはCIから実行されます。
