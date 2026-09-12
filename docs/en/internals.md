@@ -1,6 +1,6 @@
-# Implementation, memory and benchmarks
+# Implementation and memory
 
-How the matcher is built and what it costs. Japanese readers can find all of this in [README.ja.md](README.ja.md).
+How the matcher is built and what it costs. For the measurements themselves, see [benchmark.md](benchmark.md). 日本語: [../ja/internals.md](../ja/internals.md).
 
 ## The automaton
 
@@ -31,14 +31,4 @@ Inherited outputs are copied, so the index is bounded first: a dictionary whose 
 
 A full search is O(n + z) for a text of length n with z matches. `count` is O(n) from per-state totals computed at build time. Building the DFA costs time and memory proportional to states × alphabet size; the sparse backend's failure-link search adds passes during construction. See [api.md](api.md) for how the non-overlapping modes change this.
 
-## Benchmarks
-
-`pnpm benchmark` runs six synthetic inputs from a fixed seed, timing construction, full search and existence separately, with the count-only API in its own column. It compares against `ahocorasick`, `modern-ahocorasick`, `@monyone/aho-corasick` (both the standard and fast builds) and the Rust binding `@stll/aho-corasick`.
-
-Every combination runs in its own process, and every result is checked against an independent `String.indexOf` oracle for ids and positions. Each measurement warms up for at least 60 ms, then records the median, minimum and maximum of seven samples of at least 35 ms. Normalization is outside the timing, but each API's own result construction is inside it — `ahocorasick` in particular groups results by end position, so it allocates differently from an API that materialises every match.
-
-A comparison library that crashes, disagrees or times out is recorded under `skipped`. Child processes get a 512 MiB JS heap cap and 30 seconds; native memory is outside that cap. A failure in this library fails the whole benchmark.
-
-The summary lives in [../benchmark/RESULTS.md](../benchmark/RESULTS.md). This implementation wins all six scenarios against the JS/TS implementations, but `@stll/aho-corasick` is faster on `small-dictionary`, and on the match-dense `suffix-heavy` input `ahocorasick` reports a smaller `findAll` figure because it groups results by end position.
-
-Results, environment and dependency versions are saved to [../benchmark/results.json](../benchmark/results.json). Compare construction time as well as search speed. These are synthetic inputs on one machine, not a claim to be the fastest on npm — real data, CPU, runtime, pattern count and match density all move the ranking.
+The measured effect of these choices, and how the figures are produced, is in [benchmark.md](benchmark.md).

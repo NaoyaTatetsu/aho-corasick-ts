@@ -21,6 +21,6 @@ and what it showed.
 <!-- Delete the lines that do not apply. -->
 
 - [ ] `README.md` matches the new behaviour, and its examples still produce the outputs they document
-- [ ] `pnpm benchmark` was re-run, and `benchmark/RESULTS.md` agrees with `benchmark/results.json`
+- [ ] `pnpm benchmark` was re-run, and `docs/en/benchmark.md` and `docs/ja/benchmark.md` agree with `benchmark/results.json`
 - [ ] `benchmark/baseline.ts` and `benchmark/baseline.mjs` are untouched — they are the frozen snapshot `pnpm benchmark --compare` measures against
 - [ ] New dependencies are older than 24 hours, so `pnpm install --frozen-lockfile` does not trip pnpm's minimum release age

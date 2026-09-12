@@ -2,7 +2,7 @@
 
 Fast, dependency-free Aho–Corasick matching for TypeScript. Register any number of keywords once, then find every occurrence of all of them in a single pass over the text. Adding keywords barely changes the cost of a scan.
 
-日本語のドキュメントは [docs/README.ja.md](docs/README.ja.md) にあります。
+日本語のドキュメントは [docs/ja/README.md](docs/ja/README.md) にあります。
 
 ## Install
 
@@ -74,21 +74,21 @@ kw.findAll('New York and New and York');
 // New York@0, New@13, York@21 — no overlaps
 ```
 
-[docs/usage.md](docs/usage.md) walks through all of them.
+[docs/en/usage.md](docs/en/usage.md) walks through all of them.
 
 ## Documentation
 
 | | |
 | --- | --- |
-| [docs/usage.md](docs/usage.md) | The complete guide, option by option |
-| [docs/api.md](docs/api.md) | Every member, the ordering guarantees, offsets, complexity and errors |
-| [docs/internals.md](docs/internals.md) | How the automaton is built, what it costs, and how the benchmarks are run |
-| [docs/development.md](docs/development.md) | Working on this package |
-| [docs/README.ja.md](docs/README.ja.md) | All of the above, in Japanese |
-| [benchmark/RESULTS.md](benchmark/RESULTS.md) | Measured figures against four other implementations |
+| [docs/en/usage.md](docs/en/usage.md) | The complete guide, option by option |
+| [docs/en/api.md](docs/en/api.md) | Every member, the ordering guarantees, offsets, complexity and errors |
+| [docs/en/internals.md](docs/en/internals.md) | How the automaton is built and what it costs |
+| [docs/en/development.md](docs/en/development.md) | Working on this package |
+| [docs/ja/](docs/ja/README.md) | All of the above, in Japanese |
+| [docs/en/benchmark.md](docs/en/benchmark.md) | How the benchmarks are run, and the measured figures |
 
 ## What this is not for
 
-Patterns that change on every call, flexible matching that needs a regular expression, dictionaries that change after construction, or searching across stream chunks. See the end of [docs/usage.md](docs/usage.md).
+Patterns that change on every call, flexible matching that needs a regular expression, dictionaries that change after construction, or searching across stream chunks. See the end of [docs/en/usage.md](docs/en/usage.md).
 
 MIT License.

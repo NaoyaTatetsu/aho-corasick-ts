@@ -1,6 +1,6 @@
 # Development
 
-Japanese readers can find all of this in [README.ja.md](README.ja.md).
+Japanese readers can find all of this in [../ja/development.md](../ja/development.md).
 
 Node.js 22.12 or newer, pnpm 11.9.0, TypeScript 7.x (pinned to 7.0.2 in the lockfile). Linting and formatting are Biome 2.5.12.
 
@@ -18,7 +18,7 @@ CI runs `lint` → `typecheck` → `test` → `pack` on Node 22, 24 and 26 (22 a
 
 ## Biome configuration
 
-The configuration is [../biome.jsonc](../biome.jsonc). Four things deviate from the recommended preset, each with its reason in a comment beside it:
+The configuration is [../../biome.jsonc](../../biome.jsonc). Four things deviate from the recommended preset, each with its reason in a comment beside it:
 
 - `style/noNonNullAssertion` is off. `noUncheckedIndexedAccess` makes every TypedArray read `T | undefined`, so assertions are unavoidable, and the rule's own fix is `?.`, which would put a runtime check in the per-character loops.
 - `suspicious/noConfusingVoidType` is off. Narrowing `MatchCallback`'s `void | boolean` to `undefined | boolean` rejects any handler declared with an explicit `void` return type, which would break the public API.
@@ -28,7 +28,7 @@ The configuration is [../biome.jsonc](../biome.jsonc). Four things deviate from 
 ## Things that are easy to break
 
 - **README examples.** They document exact outputs and offsets, so a behaviour change silently falsifies them. Run them against the build.
-- **Benchmark figures.** `pnpm benchmark` rewrites `benchmark/results.json`, which then disagrees with the numbers `benchmark/RESULTS.md` publishes. Update both, or restore the file.
+- **Benchmark figures.** `pnpm benchmark` rewrites `benchmark/results.json`, which then disagrees with the numbers `docs/*/benchmark.md` publish. Update both, or restore the file.
 - **`benchmark/baseline.*`.** Editing the implementation there invalidates every `--compare` measurement.
 - **Fresh dependencies.** pnpm refuses to install anything published in the last 24 hours, so `pnpm install --frozen-lockfile` fails in CI before a single test runs. Renovate holds updates for three days to stay clear of this.
 
