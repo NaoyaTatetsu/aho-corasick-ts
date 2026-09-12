@@ -30,8 +30,14 @@ Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外し�
 
 `pnpm pack`は何も送信せずにnpm配布用のtgzを生成します。`prepack`がビルドし、`prepublishOnly`がlint・typecheck・testを実行するため、壊れた状態のままレジストリへ到達することはありません。
 
-リリースは[.github/workflows/release.yml](../../.github/workflows/release.yml)から行い、GitHub Releaseの公開をトリガーとします。認証はnpmのtrusted publishingで、ジョブがGitHubからOIDCトークンを受け取り、npmがそれを短命な資格情報と交換します。**このリポジトリに長期のnpmトークンは保存しません。** provenanceは自動で付与されます。リリースタグと`package.json`のバージョンが食い違う場合、ジョブは公開を拒否します。
+リリースは[.github/workflows/release.yml](../../.github/workflows/release.yml)から行います。`main`へのpushごとに走り、そのpushがリリースかどうかをワークフロー自身が判定します。判定しているのは[.github/scripts/check-release.mjs](../../.github/scripts/check-release.mjs)で、受け入れるより拒否するほうが多い作りです。
 
-リリース手順は、`package.json`のバージョンを設定し、[CHANGELOG.md](../../CHANGELOG.md)の`Unreleased`見出しを日付付きでそのバージョンに繰り下げ、`v<version>`のタグでGitHub Releaseを公開する、の3つです。**タグをpushしただけでは公開されません** — ワークフローはタグではなくReleaseに反応します。プレリリースとして公開した場合は`next` dist-tagで公開されるため、betaが`npm install`の既定になることはありません。
+- レジストリに既にあるバージョンはリリースではないため、通常のマージ（Renovateの自動マージを含む）は静かにそこで止まります
+- 公開済みより低いバージョン、または1段階の増加になっていないバージョンは**失敗させます**。`0.1.0`から`0.11.0`は`0.1.1`の打ち間違いであってリリースではありません
+- [CHANGELOG.md](../../CHANGELOG.md)に`## <version>`の節が無い場合も失敗します。記録の無いリリースが出ないようにするためです
+
+公開の認証はnpmのtrusted publishingで、ジョブがGitHubからOIDCトークンを受け取り、npmがそれを短命な資格情報と交換します。**このリポジトリに長期のnpmトークンは保存しません。** provenanceは自動で付与されます。公開後はコミットにタグを打ち、いま検査したCHANGELOGの節を本文としてGitHub Releaseを作成します。プレリリースの場合は`next` dist-tagで公開されるため、betaが`npm install`の既定になることはありません。
+
+リリース手順は、`pnpm version <patch|minor|major>`を実行し、CHANGELOGの`Unreleased`見出しを日付付きでそのバージョンに繰り下げたPRを作るだけです。**マージした時点で公開されます。**
 
 **初回公開だけはこのワークフローを使えません。** npmのtrusted publishingはパッケージの設定ページで構成するもので、PyPIのpending publisherに相当する仕組みが無いため、パッケージが存在しないと信頼関係を結べません。0.1.0はローカルの`npm publish`で公開し、その後npmjs.comでこのリポジトリと`release.yml`をtrusted publisherとして登録すれば、以降のリリースはCIから実行されます。

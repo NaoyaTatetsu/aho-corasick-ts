@@ -40,16 +40,25 @@ The configuration is [../../biome.jsonc](../../biome.jsonc). Three things deviat
 `prepublishOnly` runs lint, typecheck and tests, so a broken tree cannot reach the registry.
 
 Releases go out from [.github/workflows/release.yml](../../.github/workflows/release.yml), which
-reacts to a published GitHub Release. It authenticates through npm's trusted publishing: the job
-asks GitHub for an OIDC token and npm exchanges it for a short-lived credential, so no long-lived
-npm token is stored in this repository. Provenance is attached automatically. The job refuses to
-publish when the release tag disagrees with the version in `package.json`.
+runs on every push to `main` and decides for itself whether that push is a release.
+[.github/scripts/check-release.mjs](../../.github/scripts/check-release.mjs) is the gate, and it
+refuses more than it accepts:
 
-To cut a release: set the version in `package.json`, move the `Unreleased` heading in
-[CHANGELOG.md](../../CHANGELOG.md) down to it with the date, then publish a GitHub Release tagged
-`v<version>`. Pushing the tag on its own publishes nothing — the workflow reacts to the release,
-not to the tag. A release marked as a pre-release publishes under the `next` dist-tag, so a beta
-never becomes what `npm install` hands out.
+- a version the registry already has is not a release, so ordinary merges — Renovate's included —
+  stop there quietly
+- a version below the published one, or one that is not a single step from it, fails the run.
+  `0.1.0` to `0.11.0` is a typo for `0.1.1`, not a release
+- a version with no `## <version>` section in [CHANGELOG.md](../../CHANGELOG.md) fails too, so
+  nothing ships undocumented
+
+Publishing authenticates through npm's trusted publishing: the job asks GitHub for an OIDC token
+and npm exchanges it for a short-lived credential, so no long-lived npm token is stored in this
+repository. Provenance is attached automatically. Afterwards the job tags the commit and opens a
+GitHub Release whose notes are the changelog section it just checked for. A release marked as a
+prerelease publishes under the `next` dist-tag, so a beta never becomes what `npm install` hands out.
+
+To cut a release, open a pull request that runs `pnpm version <patch|minor|major>` and moves the
+`Unreleased` heading in the changelog down to that version with the date. Merging it publishes.
 
 **The first publish cannot use this workflow.** npm's trusted publishing is configured on a
 package's settings page, and npm has no equivalent of PyPI's pending publisher, so the package has
