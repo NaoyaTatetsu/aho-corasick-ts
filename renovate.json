@@ -19,12 +19,12 @@
       "automerge": true
     },
     {
-      "description": "The libraries the benchmark measures against. Their versions are recorded in benchmark/results.json, and the figures RESULTS.md publishes were measured with them, so these land as one reviewed change rather than drifting one package at a time.",
+      "description": "The libraries the benchmark measures against. Their versions are recorded in benchmark/results.json, and the figures docs/*/benchmark.md publish were measured with them, so these land as one reviewed change rather than drifting one package at a time.",
       "matchPackageNames": ["ahocorasick", "modern-ahocorasick", "@monyone/aho-corasick", "@stll/aho-corasick"],
       "groupName": "benchmark comparison libraries",
       "automerge": false,
       "prBodyNotes": [
-        "⚠️ Merging this invalidates the published benchmark. Run `pnpm benchmark`, then update `benchmark/RESULTS.md` and `benchmark/results.json` in the same change."
+        "⚠️ Merging this invalidates the published benchmark. Run `pnpm benchmark`, then update `docs/en/benchmark.md`, `docs/ja/benchmark.md` and `benchmark/results.json` in the same change."
       ]
     }
   ]
