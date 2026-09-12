@@ -35,7 +35,7 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "pnpm build && node --test test/*.test.mjs",
-    "bench": "pnpm build && node bench/run.mjs",
+    "benchmark": "pnpm build && node benchmark/run.mjs",
     "prepack": "pnpm build",
     "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test"
   },

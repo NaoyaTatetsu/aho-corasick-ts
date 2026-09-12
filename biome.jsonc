@@ -1,14 +1,14 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
   "files": {
-    // bench/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte so
-    // `pnpm bench --compare` measures the same code it always did. It says "Do not edit".
-    "includes": ["src/**/*.ts", "test/**/*.mjs", "bench/run.mjs"]
+    // benchmark/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte
+    // so `pnpm benchmark --compare` measures the same code it always did. Marked "Do not edit".
+    "includes": ["src/**/*.ts", "test/**/*.mjs", "benchmark/run.mjs"]
   },
   "formatter": {
     "indentStyle": "space",
     "indentWidth": 2,
-    // Wide enough to keep the transition loops and the dense bench adapters on one line.
+    // Wide enough to keep the transition loops and the dense benchmark adapters on one line.
     "lineWidth": 200
   },
   "javascript": {
@@ -44,6 +44,6 @@
       }
     }
   },
-  // bench/run.mjs groups its imports by role (node builtins, the local build, competitors).
+  // benchmark/run.mjs groups its imports by role (node builtins, the local build, competitors).
   "assist": { "actions": { "source": { "organizeImports": "off" } } }
 }

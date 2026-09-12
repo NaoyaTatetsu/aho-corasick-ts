@@ -24,7 +24,7 @@ modern-ahocorasickのUnicodeおよびlarge-alphabetケースは、子プロセ�
 
 ## 出力リンクの平坦化による改善
 
-接尾辞リンクを辿る出力の走査を、状態ごとの連続領域（CSR形式）へ平坦化した効果です。`pnpm bench --compare`で計測した2回の実行の比です。
+接尾辞リンクを辿る出力の走査を、状態ごとの連続領域（CSR形式）へ平坦化した効果です。`pnpm benchmark --compare`で計測した2回の実行の比です。
 
 | Scenario | `findAll` | `forEach` |
 | --- | ---: | ---: |
@@ -36,6 +36,6 @@ modern-ahocorasickのUnicodeおよびlarge-alphabetケースは、子プロセ�
 
 一致件数の多い`findAll`は結果オブジェクトの割り当てとGCが支配的で、実行ごとのばらつきが大きく、`suffix-heavy`では0.65xから1.06xまで振れます（サンプルの範囲も重なります）。上表のうち再現性が高いのは走査そのものを測る`forEach`側です。一致が無い条件（ascii-no-match、late-match）と`indexOf`経路の条件（small-dictionary、small-dense）は平坦化の対象外で、差は測定誤差の範囲です。構築時間は同等でした。比較用の実装は[baseline.ts](baseline.ts)に固定してあります。
 
-`pnpm bench`で再測定できます。CPUの負荷やGCにより結果は変動します。構築・存在判定・count・遷移表サイズと各サンプルの範囲は[results.json](results.json)に記録しています。
+`pnpm benchmark`で再測定できます。CPUの負荷やGCにより結果は変動します。構築・存在判定・count・遷移表サイズと各サンプルの範囲は[results.json](results.json)に記録しています。
 
 比較対象の一次資料: [ahocorasick](https://github.com/BrunoRB/ahocorasick)、[@monyone/aho-corasick](https://github.com/monyone/aho-corasick)、[modern-ahocorasick](https://www.npmjs.com/package/modern-ahocorasick)、[@stll/aho-corasick](https://www.npmjs.com/package/@stll/aho-corasick)。

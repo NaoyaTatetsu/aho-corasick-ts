@@ -1,4 +1,4 @@
-/** Frozen snapshot of src/index.ts before the flattened output index, used by `pnpm bench --compare`. Do not edit. */
+/** Frozen snapshot of src/index.ts before the flattened output index, used by `pnpm benchmark --compare`. Do not edit. */
 /** Offsets use UTF-16 code units, as in String.slice. End is exclusive. */
 export interface Match {
   readonly patternIndex: number;
