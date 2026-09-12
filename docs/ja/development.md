@@ -16,7 +16,7 @@ pnpm benchmark
 pnpm pack
 ```
 
-CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。プルリクエストではさらにNode 24で1回だけカバレッジを計測し、結果をコメントとして投稿します。push のたびに増やさず、既存のコメントを更新します。
+CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。プルリクエストではさらにNode 24で1回だけカバレッジを計測し、結果をコメントとして投稿します。push のたびに増やさず、既存のコメントを更新します。テストランナーの固定幅の表をコメント用のMarkdownに変換しているのは[.github/scripts/coverage-comment.mjs](../../.github/scripts/coverage-comment.mjs)で、保存したレポートを食わせれば出力を手元で確認できます。
 
 カバレッジはテストが読み込む`dist/index.js`に対して計測されるため、行番号はコンパイル後のものです。`--experimental-test-coverage`に追加の依存は不要です。閾値（`--test-coverage-lines`など）も使えますが、整数しか受け付けないため現在は設定していません。
 

@@ -53,27 +53,18 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm coverage | tee coverage.txt
+      - name: Measure coverage
+        run: |
+          # Without pipefail, tee's success would hide a failing test run.
+          set -o pipefail
+          pnpm coverage | tee coverage.txt
       - name: Comment the report on the pull request
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}
         run: |
           set -euo pipefail
-          # The reporter prefixes every line, with '#' when piped and 'i' on a terminal.
-          table=$(sed -n '/start of coverage report/,/end of coverage report/p' coverage.txt \
-            | sed -e 's/^# //' -e 's/^\xe2\x84\xb9 //' -e '/coverage report$/d')
-          {
-            echo '<!-- coverage-report -->'
-            echo '### Coverage'
-            echo
-            echo '```'
-            echo "$table"
-            echo '```'
-            echo
-            echo "Measured on Node 24 against \`dist/index.js\`, the build the tests run against."
-            echo "Line numbers are the compiled file's; \`pnpm coverage\` reproduces this locally."
-          } > comment.md
+          node .github/scripts/coverage-comment.mjs coverage.txt > comment.md
           # Update the previous report instead of stacking a new comment per push.
           id=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${PR}/comments" --paginate \
             --jq 'map(select(.body | startswith("<!-- coverage-report -->"))) | last | .id // empty')
