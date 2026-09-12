@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "timezone": "Asia/Tokyo",
-  "schedule": ["before 9am on monday"],
+  "schedule": ["after 1am and before 3am"],
   "semanticCommits": "disabled",
   "dependencyDashboard": true,
   "minimumReleaseAge": "3 days",
