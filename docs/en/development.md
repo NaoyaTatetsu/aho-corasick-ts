@@ -57,8 +57,13 @@ repository. Provenance is attached automatically. Afterwards the job tags the co
 GitHub Release whose notes are the changelog section it just checked for. A release marked as a
 prerelease publishes under the `next` dist-tag, so a beta never becomes what `npm install` hands out.
 
-To cut a release, open a pull request that runs `pnpm version <patch|minor|major>` and moves the
-`Unreleased` heading in the changelog down to that version with the date. Merging it publishes.
+To cut a release, open a pull request that runs `pnpm version <patch|minor|major>
+--no-git-tag-version` and moves the `Unreleased` heading in the changelog down to that version
+with the date. Merging it publishes.
+
+`--no-git-tag-version` matters: without it pnpm 12 commits the bump and tags it locally, and that
+tag points at the branch rather than the commit that lands on `main`. The workflow tags the merge
+commit itself, which is the one that was actually published.
 
 **The first publish cannot use this workflow.** npm's trusted publishing is configured on a
 package's settings page, and npm has no equivalent of PyPI's pending publisher, so the package has

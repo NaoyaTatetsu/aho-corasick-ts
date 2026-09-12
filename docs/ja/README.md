@@ -14,7 +14,7 @@ pnpm add @naoya_tatetsu/aho-corasick-ts
 # yarn add @naoya_tatetsu/aho-corasick-ts
 ```
 
-Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.12以降の`require(ESM)`からも読み込めます（古いNode向けのCJSビルドは含みません）。実行時依存はゼロで、Node固有のAPIも使っていないため、ブラウザのESMとしても利用できます（ブラウザでの性能検証は未実施です）。
+Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.12以降の`require(ESM)`からも読み込めます。ただしNode 22では読み込み時に`ExperimentalWarning`が出ます（Node 24以降では出ません）。古いNode向けのCJSビルドは含みません。実行時依存はゼロで、Node固有のAPIも使っていないため、ブラウザのESMとしても利用できます（ブラウザでの性能検証は未実施です）。
 
 ## はじめに
 
