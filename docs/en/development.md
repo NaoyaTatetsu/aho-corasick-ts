@@ -10,11 +10,14 @@ pnpm lint        # biome check . — lint plus format check
 pnpm lint:fix    # biome check --write .
 pnpm typecheck
 pnpm test
+pnpm coverage    # the same tests, with Node's built-in coverage report
 pnpm benchmark
 pnpm pack
 ```
 
-CI runs `lint` → `typecheck` → `test` → `pack` on Node 22, 24 and 26 (22 and 24 are LTS; 26 is current).
+CI runs `lint` → `typecheck` → `test` → `pack` on Node 22, 24 and 26 (22 and 24 are LTS; 26 is current). On a pull request it also measures coverage once, on Node 24, and posts the report as a comment, editing the previous one rather than stacking a new one per push. [.github/scripts/coverage-comment.mjs](../../.github/scripts/coverage-comment.mjs) turns the test runner's fixed-width table into that comment's markdown; run it over a saved report to see what it produces.
+
+Coverage is reported against `dist/index.js`, since that is what the tests import, so its line numbers are the compiled file's. `--experimental-test-coverage` needs no extra dependency; thresholds exist too (`--test-coverage-lines` and friends) but take whole numbers only, and are not wired in.
 
 ## Biome configuration
 
