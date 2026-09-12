@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "timezone": "Asia/Tokyo",
+  "schedule": ["before 9am on monday"],
+  "semanticCommits": "disabled",
+  "dependencyDashboard": true,
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "description": "engines.node is the support floor this package promises to its consumers. Raising it is a breaking change to publish deliberately, not a dependency to track.",
+      "matchDepTypes": ["engines"],
+      "enabled": false
+    },
+    {
+      "description": "Every dependency here is a devDependency, and lint, typecheck, tests and pack all run on Node 22, 24 and 26, so patch and minor updates can ride on a green run.",
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["patch", "minor"],
+      "automerge": true
+    },
+    {
+      "description": "The libraries the benchmark measures against. Their versions are recorded in benchmark/results.json, and the figures RESULTS.md publishes were measured with them, so these land as one reviewed change rather than drifting one package at a time.",
+      "matchPackageNames": ["ahocorasick", "modern-ahocorasick", "@monyone/aho-corasick", "@stll/aho-corasick"],
+      "groupName": "benchmark comparison libraries",
+      "automerge": false,
+      "prBodyNotes": [
+        "⚠️ Merging this invalidates the published benchmark. Run `pnpm benchmark`, then update `benchmark/RESULTS.md` and `benchmark/results.json` in the same change."
+      ]
+    }
+  ]
+}
