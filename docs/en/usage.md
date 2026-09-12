@@ -1,6 +1,6 @@
 # Usage
 
-The complete guide. [README.md](../README.md) covers installation and the first few minutes; everything else is here. For the exact contract — ordering, offsets, errors — see [api.md](api.md). Japanese readers can find all of this in [README.ja.md](README.ja.md).
+The complete guide. [README.md](../../README.md) covers installation and the first few minutes; everything else is here. For the exact contract — ordering, offsets, errors — see [api.md](api.md). Japanese readers can find all of this in [../ja/usage.md](../ja/usage.md).
 
 ## Building a dictionary
 

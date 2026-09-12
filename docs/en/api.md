@@ -1,6 +1,6 @@
 # API and matching semantics
 
-The contract. For worked examples see [usage.md](usage.md); for how it is built, [internals.md](internals.md). Japanese readers can find all of this in [README.ja.md](README.ja.md).
+The contract. For worked examples see [usage.md](usage.md); for how it is built, [internals.md](internals.md). Japanese readers can find all of this in [../ja/api.md](../ja/api.md).
 
 ## Members
 
