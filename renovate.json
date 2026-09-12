@@ -6,6 +6,16 @@
   "semanticCommits": "disabled",
   "dependencyDashboard": true,
   "minimumReleaseAge": "3 days",
+  "customManagers": [
+    {
+      "description": "biome.jsonc pins its $schema to a Biome version, so it has to move with the dependency instead of waiting to be noticed.",
+      "customType": "regex",
+      "managerFilePatterns": ["/^biome\\.jsonc$/"],
+      "matchStrings": ["biomejs\\.dev/schemas/(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)/schema\\.json"],
+      "depNameTemplate": "@biomejs/biome",
+      "datasourceTemplate": "npm"
+    }
+  ],
   "packageRules": [
     {
       "description": "engines.node is the support floor this package promises to its consumers. Raising it is a breaking change to publish deliberately, not a dependency to track.",

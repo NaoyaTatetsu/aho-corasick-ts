@@ -2,7 +2,7 @@
 
 Japanese readers can find all of this in [../ja/development.md](../ja/development.md).
 
-Node.js 22.12 or newer, pnpm 11.9.0, TypeScript 7.x (pinned to 7.0.2 in the lockfile). Linting and formatting are Biome 2.5.12.
+Node.js 22.12 or newer. The pnpm, TypeScript and Biome versions are pinned in `package.json`, so they are whatever Renovate last landed rather than numbers repeated here.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -21,11 +21,10 @@ Coverage is reported against `dist/index.js`, since that is what the tests impor
 
 ## Biome configuration
 
-The configuration is [../../biome.jsonc](../../biome.jsonc). Four things deviate from the recommended preset, each with its reason in a comment beside it:
+The configuration is [../../biome.jsonc](../../biome.jsonc). Three things deviate from the recommended preset, each with its reason in a comment beside it:
 
 - `style/noNonNullAssertion` is off. `noUncheckedIndexedAccess` makes every TypedArray read `T | undefined`, so assertions are unavoidable, and the rule's own fix is `?.`, which would put a runtime check in the per-character loops.
 - `suspicious/noConfusingVoidType` is off. Narrowing `MatchCallback`'s `void | boolean` to `undefined | boolean` rejects any handler declared with an explicit `void` return type, which would break the public API.
-- `correctness/noUnusedPrivateClassMembers` is off. Biome 2.5.12 does not see fields read only through `const { … } = this`, which is how the scan loops hoist them, and reports four live fields as dead. tsconfig's `noUnusedLocals` covers the same ground and does follow that destructuring.
 - `benchmark/baseline.ts` and `benchmark/baseline.mjs` are excluded. They are a frozen snapshot of an older `src/index.ts`, kept so `pnpm benchmark --compare` measures the same code it always did.
 
 ## Things that are easy to break
