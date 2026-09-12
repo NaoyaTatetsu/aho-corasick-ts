@@ -8,7 +8,7 @@ Build once, apply to as many texts as you like. **Construction is the expensive 
 
 ```ts
 // ng-words.ts
-import { AhoCorasick } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
 
 export const ngWords = new AhoCorasick(['fraud', 'winner', 'free']);
 ```
@@ -124,7 +124,7 @@ ng.forEach('free free and fraud', patternIndex => { tally[patternIndex]++; });
 A callback that returns exactly `false` ends the scan there, so taking the first few matches does not cost a full pass.
 
 ```ts
-import type { Match } from 'aho-corasick-ts';
+import type { Match } from '@naoya_tatetsu/aho-corasick-ts';
 
 const found: Match[] = [];
 ng.forEach('free, winner, fraud', (patternIndex, start, end) => {
@@ -202,8 +202,8 @@ tuned.stats;
 `Match`, `MatchCallback`, `Options`, `MatchKind`, `WordBoundary` and `Replacement` are all exported.
 
 ```ts
-import { AhoCorasick } from 'aho-corasick-ts';
-import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundary } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
+import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundary } from '@naoya_tatetsu/aho-corasick-ts';
 
 const kind: MatchKind = 'leftmost-longest';
 const boundary: WordBoundary = 'unicode';

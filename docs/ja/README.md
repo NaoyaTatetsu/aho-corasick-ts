@@ -1,6 +1,6 @@
-# aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/aho-corasick-ts)](https://www.npmjs.com/package/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](../../LICENSE)
+# @naoya_tatetsu/aho-corasick-ts [![Test](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml/badge.svg)](https://github.com/NaoyaTatetsu/aho-corasick-ts/actions/workflows/test.yml) [![npm](https://img.shields.io/npm/v/@naoya_tatetsu/aho-corasick-ts)](https://www.npmjs.com/package/@naoya_tatetsu/aho-corasick-ts) [![license](https://img.shields.io/badge/license-MIT-blue)](../../LICENSE)
 
-**aho-corasick-ts**は、実行時依存ゼロのTypeScript向け[Aho–Corasick](https://ja.wikipedia.org/wiki/エイホ–コラシック法)文字列検索ライブラリです。
+**@naoya_tatetsu/aho-corasick-ts**は、実行時依存ゼロのTypeScript向け[Aho–Corasick](https://ja.wikipedia.org/wiki/エイホ–コラシック法)文字列検索ライブラリです。
 
 複数のキーワードを一度登録すれば、テキスト1回の走査で全キーワードの出現位置をまとめて取得できます。キーワードが何件あっても走査コストはほぼ変わりません。
 
@@ -9,9 +9,9 @@ English documentation is at [README.md](../../README.md).
 ## インストール
 
 ```sh
-pnpm add aho-corasick-ts
-# npm install aho-corasick-ts
-# yarn add aho-corasick-ts
+pnpm add @naoya_tatetsu/aho-corasick-ts
+# npm install @naoya_tatetsu/aho-corasick-ts
+# yarn add @naoya_tatetsu/aho-corasick-ts
 ```
 
 Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.12以降の`require(ESM)`からも読み込めます（古いNode向けのCJSビルドは含みません）。実行時依存はゼロで、Node固有のAPIも使っていないため、ブラウザのESMとしても利用できます（ブラウザでの性能検証は未実施です）。
@@ -19,7 +19,7 @@ Node.js 22.12以降が必要です。ESMと型定義を同梱しており、22.1
 ## はじめに
 
 ```ts
-import { AhoCorasick } from 'aho-corasick-ts';
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
 
 const matcher = new AhoCorasick(['he', 'she', 'hers']);
 
