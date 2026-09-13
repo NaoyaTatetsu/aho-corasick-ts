@@ -38,6 +38,28 @@ jobs:
       - run: pnpm test
       - run: pnpm pack
 
+  # The package claims Node 18, but the test suite cannot run there: the runner's coverage
+  # and type stripping need 22. This checks the claim on the versions the suite cannot reach.
+  supported-node:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: ['18.0.0', 18, 20]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      # Replace the toolchain's Node with the one under test, after the build is made.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+      - run: node .github/scripts/smoke.mjs
+
   # Reports coverage back onto the pull request. Kept out of the matrix: one
   # measurement is the useful one, and three would be three comments.
   coverage:
