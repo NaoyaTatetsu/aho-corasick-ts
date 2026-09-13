@@ -5,13 +5,15 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
-### Documentation
+## 1.0.0 — 2026-09-14
 
-- `example/`, five runnable TypeScript programs covering the basics, filtering banned words,
-  matching text spelled another way, highlighting, and scanning text that arrives in pieces.
-  `pnpm example` runs them; `test/example.test.mjs` checks each one still prints what it claims.
-- Coverage now reports on `dist/**` alone, the code that ships, rather than on everything the test
-  run happens to touch.
+The public API is settled: from here, anything that breaks it needs a major version.
+
+### Changed
+
+- **Breaking.** `wordBoundary` without `wholeWords: true` is now a `RangeError`. On its own it
+  decides nothing, and accepting it silently left no way to notice that the boundaries asked for
+  were not being applied.
 
 ### Added
 
@@ -20,6 +22,14 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
   special case of it that folds letter case, and the mapping behind it is now exported as
   `foldCase` so a custom `fold` can compose it rather than reimplement it. Offsets stay relative to
   the original text, which is why the mapping is per code unit.
+
+### Documentation
+
+- `example/`, five runnable TypeScript programs covering the basics, filtering banned words,
+  matching text spelled another way, highlighting, and scanning text that arrives in pieces.
+  `pnpm example` runs them; `test/example.test.mjs` checks each one still prints what it claims.
+- Coverage now reports on `dist/**` alone, the code that ships, rather than on everything the test
+  run happens to touch.
 
 ## 0.1.1 — 2026-09-13
 
