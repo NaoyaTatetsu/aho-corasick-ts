@@ -5,6 +5,10 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+## 1.0.0 — 2026-09-14
+
+The public API is settled: from here, anything that breaks it needs a major version.
+
 ### Changed
 
 - **Breaking.** `wordBoundary` without `wholeWords: true` is now a `RangeError`. On its own it
