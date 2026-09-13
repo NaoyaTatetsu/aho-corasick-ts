@@ -2,7 +2,13 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "rootDir": ".",
+    // Nothing is emitted here, but rootDir is still validated, and the mapped source sits
+    // outside this directory.
+    "rootDir": "..",
+    // The examples import the package by name, the way a user writes it, and Node resolves
+    // that through the exports field at runtime. Type checking maps it to the source instead,
+    // so it needs no build and catches an API change before one happens.
+    "paths": { "@naoya_tatetsu/aho-corasick-ts": ["../src/index.ts"] },
     "types": ["node"]
   },
   "include": ["*.ts"]
