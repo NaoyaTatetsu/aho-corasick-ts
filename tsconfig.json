@@ -13,6 +13,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "verbatimModuleSyntax": true,
+    "types": [],
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },

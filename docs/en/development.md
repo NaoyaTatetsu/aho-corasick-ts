@@ -12,12 +12,13 @@ pnpm typecheck
 pnpm test
 pnpm coverage    # the same tests, with Node's built-in coverage report
 pnpm benchmark
+pnpm example    # runs every program in example/
 pnpm pack
 ```
 
 CI runs `lint` → `typecheck` → `test` → `pack` on Node 22, 24 and 26 (22 and 24 are LTS; 26 is current). On a pull request it also measures coverage once, on Node 24, and posts the report as a comment, editing the previous one rather than stacking a new one per push. [.github/scripts/coverage-comment.mjs](../../.github/scripts/coverage-comment.mjs) turns the test runner's fixed-width table into that comment's markdown; run it over a saved report to see what it produces.
 
-Coverage is reported against `dist/index.js`, since that is what the tests import, so its line numbers are the compiled file's. `--experimental-test-coverage` needs no extra dependency; thresholds exist too (`--test-coverage-lines` and friends) but take whole numbers only, and are not wired in.
+Coverage is scoped to `dist/**`, the code that actually ships, so its line numbers are the compiled file's rather than `src/index.ts`'s. The scope is a positive selection rather than a list of exclusions, so nothing new drifts into the figure: the examples run under the test suite but are documentation, and `.github/scripts/` is release tooling. Neither is published, and counting them made the headline read 95% while the library itself was at 100%. What that leaves unmeasured is `check-release.mjs`, whose logic `test/release-gate.test.mjs` covers and whose registry calls were exercised against the live registry instead. `--experimental-test-coverage` needs no extra dependency; thresholds exist too (`--test-coverage-lines` and friends) but take whole numbers only, and are not wired in.
 
 ## Biome configuration
 
@@ -30,6 +31,7 @@ The configuration is [../../biome.jsonc](../../biome.jsonc). Three things deviat
 ## Things that are easy to break
 
 - **README examples.** They document exact outputs and offsets, so a behaviour change silently falsifies them. Run them against the build.
+- **The programs in `example/`.** `test/example.test.mjs` runs each one and checks the lines it claims to print, so a change that breaks one fails the suite rather than going unnoticed. They typecheck too, against `example/tsconfig.json`.
 - **Benchmark figures.** `pnpm benchmark` rewrites `benchmark/results.json`, which then disagrees with the numbers `docs/*/benchmark.md` publish. Update both, or restore the file.
 - **`benchmark/baseline.*`.** Editing the implementation there invalidates every `--compare` measurement.
 - **Fresh dependencies.** pnpm refuses to install anything published in the last 24 hours, so `pnpm install --frozen-lockfile` fails in CI before a single test runs. Renovate holds updates for three days to stay clear of this.

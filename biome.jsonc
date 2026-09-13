@@ -3,7 +3,7 @@
   "files": {
     // benchmark/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte
     // so `pnpm benchmark --compare` measures the same code it always did. Marked "Do not edit".
-    "includes": ["src/**/*.ts", "test/**/*.mjs", "benchmark/run.mjs", ".github/scripts/*.mjs"]
+    "includes": ["src/**/*.ts", "test/**/*.mjs", "benchmark/run.mjs", ".github/scripts/*.mjs", "example/*.ts"]
   },
   "formatter": {
     "indentStyle": "space",

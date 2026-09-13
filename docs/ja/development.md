@@ -13,12 +13,13 @@ pnpm typecheck
 pnpm test
 pnpm coverage    # 同じテストをNode組み込みのカバレッジ計測付きで実行
 pnpm benchmark
+pnpm example     # example/ の全プログラムを実行
 pnpm pack
 ```
 
 CIは`lint` → `typecheck` → `test` → `pack`をNode 22・24・26で実行します（22と24がLTS、26は現行版）。プルリクエストではさらにNode 24で1回だけカバレッジを計測し、結果をコメントとして投稿します。push のたびに増やさず、既存のコメントを更新します。テストランナーの固定幅の表をコメント用のMarkdownに変換しているのは[.github/scripts/coverage-comment.mjs](../../.github/scripts/coverage-comment.mjs)で、保存したレポートを食わせれば出力を手元で確認できます。
 
-カバレッジはテストが読み込む`dist/index.js`に対して計測されるため、行番号はコンパイル後のものです。`--experimental-test-coverage`に追加の依存は不要です。閾値（`--test-coverage-lines`など）も使えますが、整数しか受け付けないため現在は設定していません。
+カバレッジは実際に配布される`dist/**`だけを対象にしているため、行番号は`src/index.ts`ではなくコンパイル後のものです。除外を並べるのではなく対象を明示する形にしてあるので、新しいファイルが数値に紛れ込むことはありません。例はテストから実行されますがドキュメントであり、`.github/scripts/`はリリース用のツールで、どちらも配布物ではありません。これらを数えると、本体が100%であるにもかかわらず見出しが95%と読める状態になっていました。その結果 `check-release.mjs` が計測対象外になりますが、ロジックは`test/release-gate.test.mjs`が、レジストリ呼び出しは実レジストリに対する実行で確認しています。`--experimental-test-coverage`に追加の依存は不要です。閾値（`--test-coverage-lines`など）も使えますが、整数しか受け付けないため現在は設定していません。
 
 Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外しているのは次の3点です（理由は設定ファイル内にコメントとして記載）。
 

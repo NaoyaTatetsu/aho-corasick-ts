@@ -84,6 +84,7 @@ kw.findAll('New York and New and York');
 | | |
 | --- | --- |
 | [docs/en/usage.md](docs/en/usage.md) | The complete guide, option by option |
+| [example/](example/) | Runnable programs — the basics, banned words, spelling variants, highlighting, pieces |
 | [docs/en/api.md](docs/en/api.md) | Every member, the ordering guarantees, offsets, complexity and errors |
 | [docs/en/internals.md](docs/en/internals.md) | How the automaton is built and what it costs |
 | [docs/en/development.md](docs/en/development.md) | Working on this package |

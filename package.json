@@ -35,12 +35,13 @@
   "packageManager": "pnpm@12.4.0",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p example/tsconfig.json",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "pnpm build && node --test test/*.test.mjs",
-    "coverage": "pnpm build && node --test --experimental-test-coverage --test-coverage-exclude='test/**' test/*.test.mjs",
+    "coverage": "pnpm build && node --test --experimental-test-coverage --test-coverage-include='dist/**' test/*.test.mjs",
     "benchmark": "pnpm build && node benchmark/run.mjs",
+    "example": "pnpm build && for f in example/*.ts; do echo \"--- $f ---\"; node --experimental-strip-types \"$f\"; done",
     "prepack": "pnpm build",
     "prepublishOnly": "pnpm lint && pnpm typecheck && pnpm test"
   },
@@ -49,6 +50,7 @@
     "@biomejs/biome": "2.5.13",
     "@monyone/aho-corasick": "^1.0.0",
     "@stll/aho-corasick": "1.0.4",
+    "@types/node": "26.5.1",
     "ahocorasick": "1.0.2",
     "modern-ahocorasick": "2.0.4",
     "typescript": "7.0.2"

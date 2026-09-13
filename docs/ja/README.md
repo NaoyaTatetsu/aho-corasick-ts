@@ -84,6 +84,7 @@ kw.findAll('東京大学と東京の大学');
 | | |
 | --- | --- |
 | [usage.md](usage.md) | 使い方の完全なガイド |
+| [../../example/](../../example/) | 実行できるサンプル — 基本、NGワード、表記ゆれ、ハイライト、分割入力 |
 | [api.md](api.md) | 全メンバー、順序保証、オフセット、計算量、例外 |
 | [internals.md](internals.md) | オートマトンの構造とメモリ |
 | [benchmark.md](benchmark.md) | 計測方法と、他4実装との比較結果 |
