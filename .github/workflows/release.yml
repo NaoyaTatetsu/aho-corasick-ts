@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           # Node 24 carries npm 11.19, past the 11.5.1 that trusted publishing needs.
           # registry-url is deliberately unset: it writes an .npmrc expecting NODE_AUTH_TOKEN,
