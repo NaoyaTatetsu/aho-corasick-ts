@@ -210,7 +210,7 @@ const w = new AhoCorasick(['cat'], { wholeWords: true });
 w.findAll('cat cats _cat (cat)').map(m => m.start);   // [0, 15]
 ```
 
-`wordBoundary` picks what counts as a word character.
+`wordBoundary` picks what counts as a word character. It only means something alongside `wholeWords`, so setting it on its own is a `RangeError` rather than a setting that quietly does nothing.
 
 | Value | Word characters |
 | --- | --- |

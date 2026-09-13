@@ -215,7 +215,7 @@ const w = new AhoCorasick(['cat'], { wholeWords: true });
 w.findAll('cat cats _cat (cat)').map(m => m.start);   // [0, 15]
 ```
 
-単語構成文字の定義は`wordBoundary`で選びます。
+単語構成文字の定義は`wordBoundary`で選びます。`wholeWords`と併用したときにだけ意味を持つため、単独で指定すると`RangeError`になります（黙って無視されることはありません）。
 
 | 値 | 単語構成文字 |
 | --- | --- |

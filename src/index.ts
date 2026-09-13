@@ -62,7 +62,11 @@ export interface Options {
   fold?: (codeUnit: number) => number;
   /** Report only matches whose neighbouring characters are not word characters. Default: false. */
   wholeWords?: boolean;
-  /** Word characters for `wholeWords`. Default: `unicode`. */
+  /**
+   * Word characters for `wholeWords`. Default: `unicode`. Setting it without `wholeWords` is a
+   * `RangeError`: on its own it decides nothing, and accepting it silently would leave no way
+   * to notice that the boundaries asked for are not being applied.
+   */
   wordBoundary?: WordBoundary;
 }
 
@@ -346,6 +350,11 @@ export class AhoCorasick {
     if (matchKind !== 'all' && matchKind !== 'leftmost-first' && matchKind !== 'leftmost-longest') throw new RangeError('matchKind must be all, leftmost-first or leftmost-longest');
     const wordBoundary = options.wordBoundary ?? 'unicode';
     if (wordBoundary !== 'unicode' && wordBoundary !== 'ascii') throw new RangeError('wordBoundary must be unicode or ascii');
+    // On its own it decides nothing, and accepting it silently leaves no way to notice that
+    // the boundaries asked for are not being applied.
+    if (options.wordBoundary !== undefined && options.wholeWords !== true) {
+      throw new RangeError('wordBoundary only applies with wholeWords: true');
+    }
     const caseInsensitive = options.caseInsensitive === true;
     if (caseInsensitive && options.fold) {
       throw new RangeError('caseInsensitive and fold cannot both be set; call foldCase inside fold instead');
