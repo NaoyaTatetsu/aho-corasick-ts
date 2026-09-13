@@ -16,7 +16,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v4
         with:
           # Node 24 carries npm 11.19, past the 11.5.1 that trusted publishing needs.
