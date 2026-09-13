@@ -67,6 +67,7 @@ Four options cover the cases the defaults do not. Each is off unless you ask for
 | --- | --- |
 | `matchKind` | Report non-overlapping matches instead of every overlap — `leftmost-first` or `leftmost-longest` |
 | `caseInsensitive` | Fold case before matching, with offsets still relative to the original text |
+| `fold` | Map every code unit before matching — katakana onto hiragana, fullwidth onto ASCII |
 | `wholeWords` | Drop matches whose neighbouring characters are word characters |
 | `maxDenseBytes` | Cap the transition table; larger dictionaries fall back to a sparse representation |
 

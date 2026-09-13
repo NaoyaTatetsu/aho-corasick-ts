@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { AhoCorasick } from '../dist/index.js';
+import { AhoCorasick, foldCase } from '../dist/index.js';
 
 function oracle(patterns, text) {
   const matches = [];
@@ -478,5 +478,87 @@ test('sparse transitions and the suffix-link output walk combine', () => {
   for (const options of [{ matchKind: 'leftmost-first' }, { matchKind: 'leftmost-longest' }, { matchKind: 'leftmost-longest', wholeWords: true }]) {
     const lm = new AhoCorasick(patterns, { ...options, maxDenseBytes: 0 });
     assert.deepEqual(lm.findAll(text), selectOracle(patterns, text, options), JSON.stringify(options));
+  }
+});
+
+/** Katakana and hiragana occupy parallel blocks, so one subtraction maps between them. */
+const kanaFold = code => (code >= 0x30a1 && code <= 0x30f6 ? code - 0x60 : code);
+const applyFold = (text, fold) => Array.from(text, c => String.fromCharCode(fold(c.charCodeAt(0)))).join('');
+
+test('a custom fold matches text spelled differently, at the original offsets', () => {
+  for (const maxDenseBytes of [0, 64 * 1024 * 1024]) {
+    const ac = new AhoCorasick(['あほ', 'ばか'], { fold: kanaFold, maxDenseBytes });
+    for (const text of ['このアホが', 'このあほが', 'バカとアホ', 'ばかとあほ', 'なにもない']) {
+      const expected = oracle(['あほ', 'ばか'], applyFold(text, kanaFold));
+      assert.deepEqual(ac.findAll(text), expected, text);
+      assert.equal(ac.count(text), expected.length, text);
+      assert.equal(ac.test(text), expected.length > 0, text);
+      // Offsets index the original text, so the match slices out the original spelling.
+      for (const m of ac.findAll(text)) assert.equal(m.end - m.start, ac.patterns[m.patternIndex].length);
+    }
+    assert.deepEqual(ac.patterns, ['あほ', 'ばか']);
+    assert.equal(new AhoCorasick(['あほ'], { fold: kanaFold, maxDenseBytes }).findAll('このアホが')[0].start, 2);
+  }
+});
+
+test('fold composes with foldCase, and combines with the other options', () => {
+  const both = new AhoCorasick(['アホ'], { fold: code => kanaFold(foldCase(code)) });
+  assert.equal(both.test('あほ'), true);
+  assert.equal(both.test('アホ'), true);
+  // foldCase still folds letters when composed.
+  const mixed = new AhoCorasick(['abcア'], { fold: code => kanaFold(foldCase(code)) });
+  assert.equal(mixed.test('ABCあ'), true);
+  // Selection and word boundaries see the folded text, and report original offsets.
+  const longest = new AhoCorasick(['アホ', 'アホウドリ'], { fold: kanaFold, matchKind: 'leftmost-longest' });
+  assert.deepEqual(longest.findAll('あほうどり'), [{ patternIndex: 1, start: 0, end: 5 }]);
+  assert.equal(new AhoCorasick(['ア'], { fold: kanaFold, wholeWords: true }).test('あ'), true);
+  assert.equal(new AhoCorasick(['ア'], { fold: kanaFold, wholeWords: true }).test('あい'), false);
+  assert.equal(new AhoCorasick(['アホ'], { fold: kanaFold }).replace('このあほが', '＊'), 'この＊が');
+});
+
+test('fold rejects what would break offsets or contradict caseInsensitive', () => {
+  assert.throws(() => new AhoCorasick([], { fold: () => -1 }), RangeError);
+  assert.throws(() => new AhoCorasick([], { fold: () => 0x10000 }), RangeError);
+  assert.throws(() => new AhoCorasick([], { fold: () => 1.5 }), RangeError);
+  assert.throws(() => new AhoCorasick([], { fold: () => Number.NaN }), RangeError);
+  assert.throws(() => new AhoCorasick([], { caseInsensitive: true, fold: c => c }), RangeError);
+  // An identity fold must behave exactly like no fold at all.
+  const plain = new AhoCorasick(['ab', 'bc']);
+  const identity = new AhoCorasick(['ab', 'bc'], { fold: c => c });
+  assert.deepEqual(identity.findAll('abcab'), plain.findAll('abcab'));
+});
+
+test('a fold that is not idempotent still resolves through one application', () => {
+  // 'a' -> 'b' -> 'c', applied once: a pattern written 'b' is reached by text 'a'.
+  const chain = code => (code === 0x61 ? 0x62 : code === 0x62 ? 0x63 : code);
+  // The fold applies exactly once to each side, so the pattern 'b' is stored as 'c' and
+  // text matches whenever its own single application lands on 'c' too.
+  const ac = new AhoCorasick(['b'], { fold: chain });
+  assert.equal(ac.test('a'), false, "'a' folds to 'b', while the pattern folds to 'c'");
+  assert.equal(ac.test('b'), true, 'text and pattern both fold to c');
+  assert.equal(ac.test('c'), true, "'c' is already what the pattern folds to");
+});
+
+test('seeded randomized differential tests for custom folds', () => {
+  let seed = 99;
+  const random = n => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    return seed % n;
+  };
+  const chars = ['あ', 'ア', 'ほ', 'ホ', 'ば', 'バ', 'a', 'A', ' ', '\0'];
+  const word = n => Array.from({ length: n }, () => chars[random(chars.length)]).join('');
+  const folds = [kanaFold, code => kanaFold(foldCase(code))];
+  for (const fold of folds) {
+    for (let trial = 0; trial < 300; trial++) {
+      const patterns = Array.from({ length: random(8) }, () => word(1 + random(4)));
+      const text = word(random(40));
+      const expected = oracle(
+        patterns.map(p => applyFold(p, fold)),
+        applyFold(text, fold),
+      );
+      for (const maxDenseBytes of [0, 64 * 1024 * 1024]) {
+        assert.deepEqual(new AhoCorasick(patterns, { fold, maxDenseBytes }).findAll(text), expected);
+      }
+    }
   }
 });
