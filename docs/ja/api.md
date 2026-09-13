@@ -21,10 +21,11 @@ APIの仕様です。具体例は[usage.md](usage.md)、内部構造は[internal
 | `caseInsensitive` | `false` | コード単位ごとに小文字へ畳み込んで照合 |
 | `fold` | — | コード単位ごとの写像を適用してから照合。表記ゆれの吸収に使う。`caseInsensitive`とは排他 |
 | `wholeWords` | `false` | 前後が単語構成文字の一致を捨てる |
-| `wordBoundary` | `'unicode'` | `wholeWords`の単語構成文字の定義（`'unicode'`・`'ascii'`） |
+| `wordBoundary` | `'unicode'` | `wholeWords`の単語構成文字の定義（`'unicode'`・`'ascii'`）。`wholeWords: true`と併用する場合のみ有効 |
 
 - 既定では大文字小文字を区別します。Unicode正規化は行いません（`caseInsensitive`と`wholeWords`は上記のとおり）。
 - `matchKind`・`caseInsensitive`・`wholeWords`はすべて既定のままなら走査に追加コストを持ち込みません。既定値以外は`RangeError`で、`fold`がUTF-16コード単位以外を返した場合も`RangeError`です。
+- `wordBoundary`を`wholeWords: true`なしで指定すると`RangeError`です。単独では何も決定しないため、黙って受理すると指定が効いていないことに気づけません。
 - `fold`と`caseInsensitive`も走査コストを増やしません。どちらも走査がもともと読む変換表に吸収されるためです。
 - 位置はJavaScriptの`String.slice`と同じUTF-16コード単位です。`end`は排他的です。日本語・絵文字・孤立サロゲート・NULを扱えます。
 - `matchKind: 'all'`の順序は終了位置の昇順、同じ終了位置では長いパターンを優先し、同一パターンの重複は入力順です。非重複の`matchKind`では開始位置の昇順で、同じ開始位置の優劣は`matchKind`が決め、同一パターンの重複は最小のIDを返します。

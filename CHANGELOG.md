@@ -5,6 +5,12 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+### Changed
+
+- **Breaking.** `wordBoundary` without `wholeWords: true` is now a `RangeError`. On its own it
+  decides nothing, and accepting it silently left no way to notice that the boundaries asked for
+  were not being applied.
+
 ### Documentation
 
 - `example/`, five runnable TypeScript programs covering the basics, filtering banned words,

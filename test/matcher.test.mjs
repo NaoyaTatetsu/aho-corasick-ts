@@ -416,6 +416,11 @@ test('replace covers strings, per-pattern arrays, functions and validation', () 
 test('new options reject unknown values and stay reentrant', () => {
   assert.throws(() => new AhoCorasick([], { matchKind: 'leftmost' }), RangeError);
   assert.throws(() => new AhoCorasick([], { wordBoundary: 'utf8' }), RangeError);
+  // wordBoundary decides nothing on its own, so accepting it quietly would hide the mistake.
+  assert.throws(() => new AhoCorasick([], { wordBoundary: 'ascii' }), RangeError);
+  assert.throws(() => new AhoCorasick([], { wordBoundary: 'ascii', wholeWords: false }), RangeError);
+  assert.doesNotThrow(() => new AhoCorasick([], { wordBoundary: 'ascii', wholeWords: true }));
+  assert.doesNotThrow(() => new AhoCorasick([], { wholeWords: true }));
   const ac = new AhoCorasick(['a', 'ab'], { matchKind: 'leftmost-longest' });
   const seen = [];
   ac.forEach('ab a', (id, start, end) => {

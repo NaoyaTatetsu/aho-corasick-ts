@@ -24,7 +24,7 @@ The contract. For worked examples see [usage.md](usage.md); for how it is built,
 | `caseInsensitive` | `false` | Folds each code unit to lower case before matching |
 | `fold` | — | Maps every code unit before matching, so text spelled differently still matches. Mutually exclusive with `caseInsensitive` |
 | `wholeWords` | `false` | Discards matches whose neighbours are word characters |
-| `wordBoundary` | `'unicode'` | What `wholeWords` treats as a word character: `'unicode'` or `'ascii'` |
+| `wordBoundary` | `'unicode'` | What `wholeWords` treats as a word character: `'unicode'` or `'ascii'`. Only valid alongside `wholeWords: true` |
 
 Any value outside those listed throws `RangeError`, as does a `fold` returning something that is not a UTF-16 code unit. Left at their defaults, `matchKind`, `caseInsensitive` and `wholeWords` add nothing to the cost of a scan; `fold` and `caseInsensitive` add nothing to it either, since both are absorbed into the table the scan already reads.
 
@@ -56,6 +56,7 @@ Non-overlapping selection restarts the scan at each selected match's end, so its
 | A pattern is not a string | `TypeError` |
 | `maxDenseBytes` is not a non-negative safe integer | `RangeError` |
 | `matchKind` or `wordBoundary` is not one of the listed values | `RangeError` |
+| `wordBoundary` is set without `wholeWords: true` | `RangeError` |
 | A `replace` array's length differs from the dictionary's | `RangeError` |
 | A `replace` argument is not a string, array or function | `TypeError` |
 

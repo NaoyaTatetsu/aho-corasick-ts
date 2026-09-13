@@ -210,7 +210,7 @@ const w = new AhoCorasick(['cat'], { wholeWords: true });
 w.findAll('cat cats _cat (cat)').map(m => m.start);   // [0, 15]
 ```
 
-`wordBoundary` picks what counts as a word character.
+`wordBoundary` picks what counts as a word character. It only means something alongside `wholeWords`, so setting it on its own is a `RangeError` rather than a setting that quietly does nothing.
 
 | Value | Word characters |
 | --- | --- |
@@ -250,7 +250,7 @@ import type { Match, MatchCallback, MatchKind, Options, Replacement, WordBoundar
 const kind: MatchKind = 'leftmost-longest';
 const boundary: WordBoundary = 'unicode';
 const mask: Replacement = (patternIndex, start, end) => '*'.repeat(end - start);
-const options: Options = { maxDenseBytes: 8 * 1024 * 1024, matchKind: kind, wordBoundary: boundary };
+const options: Options = { maxDenseBytes: 8 * 1024 * 1024, matchKind: kind, wholeWords: true, wordBoundary: boundary };
 const matcher = new AhoCorasick(['he', 'she'], options);
 const matches: Match[] = matcher.findAll('ushers');
 
