@@ -12,6 +12,7 @@ pnpm typecheck
 pnpm test
 pnpm coverage    # the same tests, with Node's built-in coverage report
 pnpm benchmark
+pnpm example    # runs every program in example/
 pnpm pack
 ```
 
@@ -30,6 +31,7 @@ The configuration is [../../biome.jsonc](../../biome.jsonc). Three things deviat
 ## Things that are easy to break
 
 - **README examples.** They document exact outputs and offsets, so a behaviour change silently falsifies them. Run them against the build.
+- **The programs in `example/`.** `test/example.test.mjs` runs each one and checks the lines it claims to print, so a change that breaks one fails the suite rather than going unnoticed. They typecheck too, against `example/tsconfig.json`.
 - **Benchmark figures.** `pnpm benchmark` rewrites `benchmark/results.json`, which then disagrees with the numbers `docs/*/benchmark.md` publish. Update both, or restore the file.
 - **`benchmark/baseline.*`.** Editing the implementation there invalidates every `--compare` measurement.
 - **Fresh dependencies.** pnpm refuses to install anything published in the last 24 hours, so `pnpm install --frozen-lockfile` fails in CI before a single test runs. Renovate holds updates for three days to stay clear of this.

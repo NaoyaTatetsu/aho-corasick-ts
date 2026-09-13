@@ -13,6 +13,7 @@ pnpm typecheck
 pnpm test
 pnpm coverage    # 同じテストをNode組み込みのカバレッジ計測付きで実行
 pnpm benchmark
+pnpm example     # example/ の全プログラムを実行
 pnpm pack
 ```
 
