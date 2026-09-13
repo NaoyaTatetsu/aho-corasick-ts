@@ -22,10 +22,11 @@ The contract. For worked examples see [usage.md](usage.md); for how it is built,
 | `maxDenseBytes` | `67108864` | Byte budget for the dense transition table. `0` forces the sparse representation |
 | `matchKind` | `'all'` | `'all'` reports overlaps; `'leftmost-first'` and `'leftmost-longest'` report non-overlapping matches |
 | `caseInsensitive` | `false` | Folds each code unit to lower case before matching |
+| `fold` | — | Maps every code unit before matching, so text spelled differently still matches. Mutually exclusive with `caseInsensitive` |
 | `wholeWords` | `false` | Discards matches whose neighbours are word characters |
 | `wordBoundary` | `'unicode'` | What `wholeWords` treats as a word character: `'unicode'` or `'ascii'` |
 
-Any value outside those listed throws `RangeError`. Left at their defaults, `matchKind`, `caseInsensitive` and `wholeWords` add nothing to the cost of a scan.
+Any value outside those listed throws `RangeError`, as does a `fold` returning something that is not a UTF-16 code unit. Left at their defaults, `matchKind`, `caseInsensitive` and `wholeWords` add nothing to the cost of a scan; `fold` and `caseInsensitive` add nothing to it either, since both are absorbed into the table the scan already reads.
 
 ## Offsets and text handling
 

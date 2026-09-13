@@ -5,6 +5,14 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+### Added
+
+- `fold`, which maps every UTF-16 code unit before matching so that text spelled another way still
+  matches — katakana onto hiragana, fullwidth onto ASCII, and so on. `caseInsensitive` is the
+  special case of it that folds letter case, and the mapping behind it is now exported as
+  `foldCase` so a custom `fold` can compose it rather than reimplement it. Offsets stay relative to
+  the original text, which is why the mapping is per code unit.
+
 ## 0.1.1 — 2026-09-13
 
 ### Documentation

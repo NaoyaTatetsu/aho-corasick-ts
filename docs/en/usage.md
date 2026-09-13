@@ -158,6 +158,48 @@ new AhoCorasick(['Σ'], { caseInsensitive: true }).test('σ');    // true
 
 Folding is absorbed into the code-unit-to-column table, so the scan runs exactly the same loops as a case-sensitive one and costs nothing extra per character. The table is built once per process (about 4 ms, 128 KiB).
 
+## Matching text spelled another way
+
+`caseInsensitive` folds one specific thing: letter case. `fold` generalises it — you supply the
+mapping, and it is applied to both the dictionary and the text.
+
+```ts
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
+
+// Katakana and hiragana occupy parallel blocks, so one subtraction maps between them.
+const kana = (code: number) => (code >= 0x30a1 && code <= 0x30f6 ? code - 0x60 : code);
+
+const ng = new AhoCorasick(['あほ'], { fold: kana });
+ng.test('このアホが');              // true
+ng.findAll('このアホが');           // [{ patternIndex: 0, start: 2, end: 4 }]
+ng.patterns;                        // ['あほ'] — as passed in, not folded
+```
+
+**Offsets stay relative to the original text**, which is why the mapping is per code unit: a
+mapping that changed a string's length would move every offset after it. Returning anything that
+is not a UTF-16 code unit throws `RangeError`.
+
+To fold case as well, compose `foldCase` — the same mapping `caseInsensitive` uses. Setting both
+`caseInsensitive` and `fold` is a `RangeError`, since the two would disagree about which mapping
+wins.
+
+```ts
+import { AhoCorasick, foldCase } from '@naoya_tatetsu/aho-corasick-ts';
+
+const ac = new AhoCorasick(['アホ'], { fold: code => kana(foldCase(code)) });
+ac.test('あほ');   // true
+```
+
+The mapping applies **once to each side**. A dictionary entry and a piece of text match when their
+single application lands on the same code unit, which is worth keeping in mind for a mapping that
+is not idempotent.
+
+`fold` is absorbed into the code-unit-to-column table, so the scan runs the same loops as an
+unfolded one — measurably so: on a 1,200-word dictionary over 12,000 words, a folded scan and an
+unfolded one produce an automaton with the same backend, alphabet size and transition table size,
+and time the same to within noise. The cost is paid once, at construction, calling the mapping for
+each of the 65,536 code units.
+
 ## Whole-word matching
 
 `wholeWords` discards matches whose neighbouring characters are word characters.
@@ -199,7 +241,7 @@ tuned.stats;
 
 ## TypeScript types
 
-`Match`, `MatchCallback`, `Options`, `MatchKind`, `WordBoundary` and `Replacement` are all exported.
+`Match`, `MatchCallback`, `Options`, `MatchKind`, `WordBoundary` and `Replacement` are all exported, as is the `foldCase` function.
 
 ```ts
 import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';

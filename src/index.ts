@@ -49,6 +49,17 @@ export interface Options {
   matchKind?: MatchKind;
   /** Fold each code unit to lower case before matching. Default: false. */
   caseInsensitive?: boolean;
+  /**
+   * Maps every UTF-16 code unit before matching, so that text spelled differently still
+   * matches. Must return a code unit, which keeps offsets relative to the original text —
+   * that is what rules out mappings that change a string's length.
+   *
+   * Called once per code unit at construction, not per character scanned, so the scan itself
+   * costs the same as an unfolded one. Compose `foldCase` into it to fold case as well;
+   * setting `caseInsensitive` alongside it is a `RangeError`, since the two would disagree
+   * about which mapping wins.
+   */
+  fold?: (codeUnit: number) => number;
   /** Report only matches whose neighbouring characters are not word characters. Default: false. */
   wholeWords?: boolean;
   /** Word characters for `wholeWords`. Default: `unicode`. */
@@ -87,6 +98,27 @@ function caseFoldTable(): Uint16Array {
   }
   caseFold = fold;
   return fold;
+}
+
+/**
+ * The lower-case fold `caseInsensitive` applies, exposed so that a custom `fold` can include
+ * it rather than reimplement it.
+ */
+export function foldCase(codeUnit: number): number {
+  return caseFoldTable()[codeUnit] ?? codeUnit;
+}
+
+/** Materialises a caller's mapping once, so the scan reads a table instead of calling back. */
+function foldTableFrom(fold: (codeUnit: number) => number): Uint16Array {
+  const table = new Uint16Array(CODE_UNIT_COUNT);
+  for (let code = 0; code < CODE_UNIT_COUNT; code++) {
+    const folded = fold(code);
+    if (!Number.isInteger(folded) || folded < 0 || folded >= CODE_UNIT_COUNT) {
+      throw new RangeError(`fold(${code}) returned ${folded}, which is not a UTF-16 code unit`);
+    }
+    table[code] = folded;
+  }
+  return table;
 }
 
 /** The pattern trie, before failure links turn it into an automaton. State 0 is the root. */
@@ -315,10 +347,13 @@ export class AhoCorasick {
     const wordBoundary = options.wordBoundary ?? 'unicode';
     if (wordBoundary !== 'unicode' && wordBoundary !== 'ascii') throw new RangeError('wordBoundary must be unicode or ascii');
     const caseInsensitive = options.caseInsensitive === true;
+    if (caseInsensitive && options.fold) {
+      throw new RangeError('caseInsensitive and fold cannot both be set; call foldCase inside fold instead');
+    }
     const dictionary = Array.from(patterns);
     this.patterns = Object.freeze(dictionary);
 
-    const fold = caseInsensitive ? caseFoldTable() : undefined;
+    const fold = options.fold ? foldTableFrom(options.fold) : caseInsensitive ? caseFoldTable() : undefined;
     const trie = buildTrie(dictionary, fold);
     let prefilterCodes: readonly number[] = trie.rootCodes;
     if (fold) {
@@ -326,10 +361,13 @@ export class AhoCorasick {
       // character must reach that character's column, and must pass the prefilter.
       const isRoot = new Uint8Array(CODE_UNIT_COUNT);
       for (const code of trie.rootCodes) isRoot[code] = 1;
+      // The columns as buildTrie assigned them. A caller's mapping need not be idempotent,
+      // so reading the live array could pick up a column this loop had already written.
+      const assigned = Uint32Array.from(trie.alphabet);
       const expanded: number[] = [];
       for (let code = 0; code < CODE_UNIT_COUNT; code++) {
         const folded = fold[code]!;
-        if (folded !== code && trie.alphabet[folded] !== 0) trie.alphabet[code] = trie.alphabet[folded]!;
+        if (folded !== code && assigned[folded] !== 0) trie.alphabet[code] = assigned[folded]!;
         if (isRoot[folded] === 1) expanded.push(code);
       }
       prefilterCodes = expanded;
@@ -350,7 +388,7 @@ export class AhoCorasick {
     this.outputRuns = outputIndex?.runs;
     this.outputRunStart = outputIndex?.runStart;
     // Folded matching has no indexOf equivalent, so that shortcut is only for literal search.
-    this.scanWithIndexOf = !caseInsensitive && dictionary.length <= INDEXOF_MAX_PATTERNS && dictionary.every(pattern => pattern.length <= INDEXOF_MAX_PATTERN_LENGTH);
+    this.scanWithIndexOf = fold === undefined && dictionary.length <= INDEXOF_MAX_PATTERNS && dictionary.every(pattern => pattern.length <= INDEXOF_MAX_PATTERN_LENGTH);
     this.prefilter = buildPrefilter(prefilterCodes);
     this.preallocateResults = failures.outputCount.some(count => count >= PREALLOCATE_MIN_OUTPUTS);
     this.matchKind = matchKind;

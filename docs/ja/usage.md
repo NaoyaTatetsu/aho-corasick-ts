@@ -174,6 +174,37 @@ new AhoCorasick(['Σ'], { caseInsensitive: true }).test('σ');    // true
 
 畳み込みはコード単位から列番号への変換表に吸収されるため、走査は大文字小文字を区別する場合とまったく同じループを通り、1文字あたりの追加コストはありません。変換表は1プロセスで1回だけ構築します（約4ms、128 KiB）。
 
+## 表記ゆれを吸収する
+
+`caseInsensitive`が畳み込むのは英字の大小だけです。`fold`はその一般化で、**写像を自分で渡せます**。辞書とテキストの両方に適用されます。
+
+```ts
+import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
+
+// カタカナとひらがなは並行したブロックにあるので、引き算1つで対応が取れます。
+const kana = (code: number) => (code >= 0x30a1 && code <= 0x30f6 ? code - 0x60 : code);
+
+const ng = new AhoCorasick(['あほ'], { fold: kana });
+ng.test('このアホが');              // true
+ng.findAll('このアホが');           // [{ patternIndex: 0, start: 2, end: 4 }]
+ng.patterns;                        // ['あほ'] — 渡した文字列のまま
+```
+
+**位置は元のテキスト基準のまま**です。写像がコード単位単位なのはそのためで、長さが変わる写像を許すと、それ以降のすべての位置がずれてしまいます。UTF-16コード単位でない値を返すと`RangeError`です。
+
+大文字小文字も畳み込みたい場合は、`caseInsensitive`が使っているのと同じ写像`foldCase`を合成します。`caseInsensitive`と`fold`の同時指定は`RangeError`です（どちらの写像を優先するかが決まらないため）。
+
+```ts
+import { AhoCorasick, foldCase } from '@naoya_tatetsu/aho-corasick-ts';
+
+const ac = new AhoCorasick(['アホ'], { fold: code => kana(foldCase(code)) });
+ac.test('あほ');   // true
+```
+
+写像は**両辺に1回ずつ**適用されます。辞書の語とテキストは、それぞれ1回適用した結果が同じコード単位になったときに一致します。冪等でない写像を渡す場合はこの点に注意してください。
+
+`fold`はコード単位から列番号への変換表に吸収されるため、走査は畳み込み無しの場合と同じループを通ります。実測でも、1,200語の辞書で12,000語のテキストを走査したとき、生成される自動機はbackend・アルファベット数・遷移表バイト数まで同一で、所要時間の差は測定誤差の範囲でした。コストは構築時に一度だけ、65,536個のコード単位それぞれに対して写像を呼ぶ分だけ発生します。
+
 ## 単語単位でマッチする
 
 `wholeWords`を指定すると、前後が単語構成文字である一致を捨てます。
@@ -215,7 +246,7 @@ tuned.stats;
 
 ## TypeScriptの型
 
-`Match`・`MatchCallback`・`Options`・`MatchKind`・`WordBoundary`・`Replacement`をエクスポートしています。
+`Match`・`MatchCallback`・`Options`・`MatchKind`・`WordBoundary`・`Replacement`と、関数`foldCase`をエクスポートしています。
 
 ```ts
 import { AhoCorasick } from '@naoya_tatetsu/aho-corasick-ts';
