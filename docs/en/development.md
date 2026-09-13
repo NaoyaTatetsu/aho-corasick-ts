@@ -18,7 +18,7 @@ pnpm pack
 
 CI runs `lint` → `typecheck` → `test` → `pack` on Node 22, 24 and 26 (22 and 24 are LTS; 26 is current). On a pull request it also measures coverage once, on Node 24, and posts the report as a comment, editing the previous one rather than stacking a new one per push. [.github/scripts/coverage-comment.mjs](../../.github/scripts/coverage-comment.mjs) turns the test runner's fixed-width table into that comment's markdown; run it over a saved report to see what it produces.
 
-Coverage is reported against `dist/index.js`, since that is what the tests import, so its line numbers are the compiled file's. `--experimental-test-coverage` needs no extra dependency; thresholds exist too (`--test-coverage-lines` and friends) but take whole numbers only, and are not wired in.
+Coverage is scoped to `dist/**`, the code that actually ships, so its line numbers are the compiled file's rather than `src/index.ts`'s. The scope is a positive selection rather than a list of exclusions, so nothing new drifts into the figure: the examples run under the test suite but are documentation, and `.github/scripts/` is release tooling. Neither is published, and counting them made the headline read 95% while the library itself was at 100%. What that leaves unmeasured is `check-release.mjs`, whose logic `test/release-gate.test.mjs` covers and whose registry calls were exercised against the live registry instead. `--experimental-test-coverage` needs no extra dependency; thresholds exist too (`--test-coverage-lines` and friends) but take whole numbers only, and are not wired in.
 
 ## Biome configuration
 

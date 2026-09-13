@@ -39,7 +39,7 @@
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "test": "pnpm build && node --test test/*.test.mjs",
-    "coverage": "pnpm build && node --test --experimental-test-coverage --test-coverage-exclude='test/**' test/*.test.mjs",
+    "coverage": "pnpm build && node --test --experimental-test-coverage --test-coverage-include='dist/**' test/*.test.mjs",
     "benchmark": "pnpm build && node benchmark/run.mjs",
     "example": "pnpm build && for f in example/*.ts; do echo \"--- $f ---\"; node --experimental-strip-types \"$f\"; done",
     "prepack": "pnpm build",

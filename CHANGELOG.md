@@ -10,6 +10,8 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 - `example/`, five runnable TypeScript programs covering the basics, filtering banned words,
   matching text spelled another way, highlighting, and scanning text that arrives in pieces.
   `pnpm example` runs them; `test/example.test.mjs` checks each one still prints what it claims.
+- Coverage now reports on `dist/**` alone, the code that ships, rather than on everything the test
+  run happens to touch.
 
 ### Added
 
