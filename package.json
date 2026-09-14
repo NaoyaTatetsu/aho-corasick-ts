@@ -57,8 +57,16 @@
   },
   "keywords": [
     "aho-corasick",
+    "ahocorasick",
     "string-search",
+    "string-match",
+    "text-search",
     "multi-pattern",
+    "keyword",
+    "trie",
+    "ngword",
+    "ng-word",
+    "highlight",
     "typescript"
   ]
 }

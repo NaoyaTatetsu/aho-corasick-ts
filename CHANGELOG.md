@@ -5,6 +5,15 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+### Changed
+
+- More keywords, chosen from what npm search actually returns rather than from guesswork.
+  `ahocorasick` unhyphenated, because npm treats it as a separate term and the most downloaded
+  package in this space carries it; `ngword` and `ng-word`, a niche with two results in total that
+  `example/ng-words.ts` shows the package serving; and `trie`, `keyword`, `highlight`,
+  `string-match` and `text-search`. Nothing describing a feature the package does not have —
+  `profanity` was left out, since no word list ships with it.
+
 ## 1.0.0 — 2026-09-14
 
 The public API is settled: from here, anything that breaks it needs a major version.
