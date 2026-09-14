@@ -38,6 +38,11 @@ The configuration is [../../biome.jsonc](../../biome.jsonc). Three things deviat
 
 ## Publishing
 
+`pnpm build` compiles twice — ESM into `dist/`, CommonJS into `dist/cjs/` — and writes a
+`package.json` marking the second directory as CommonJS, without which Node reads the package's
+own `"type": "module"` and rejects those files. `.github/scripts/smoke.cjs` exercises the
+`require` path, which the ESM test suite would otherwise never touch.
+
 `pnpm pack` produces the npm tarball without sending anything anywhere. `prepack` builds, and
 `prepublishOnly` runs lint, typecheck and tests, so a broken tree cannot reach the registry.
 

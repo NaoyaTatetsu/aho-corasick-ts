@@ -29,6 +29,8 @@ Biomeの設定は[biome.jsonc](../../biome.jsonc)にあり、既定から外し�
 
 ## 公開
 
+`pnpm build`は2回コンパイルします。ESMを`dist/`へ、CommonJSを`dist/cjs/`へ出力し、後者をCommonJSと示す`package.json`を書き込みます。これが無いとNodeはパッケージ自身の`"type": "module"`を読んで、そのディレクトリの`.js`をESモジュールとして扱い失敗します。`require`経路は`.github/scripts/smoke.cjs`が検証します（ESMで動くテストスイートでは決して通らない経路のため）。
+
 `pnpm pack`は何も送信せずにnpm配布用のtgzを生成します。`prepack`がビルドし、`prepublishOnly`がlint・typecheck・testを実行するため、壊れた状態のままレジストリへ到達することはありません。
 
 リリースは[.github/workflows/release.yml](../../.github/workflows/release.yml)から行います。`main`へのpushごとに走り、そのpushがリリースかどうかをワークフロー自身が判定します。判定しているのは[.github/scripts/check-release.mjs](../../.github/scripts/check-release.mjs)で、受け入れるより拒否するほうが多い作りです。

@@ -59,6 +59,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - run: node .github/scripts/smoke.mjs
+      - run: node .github/scripts/smoke.cjs
 
   # Reports coverage back onto the pull request. Kept out of the matrix: one
   # measurement is the useful one, and three would be three comments.

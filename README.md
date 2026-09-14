@@ -14,7 +14,7 @@ pnpm add @naoya_tatetsu/aho-corasick-ts
 # yarn add @naoya_tatetsu/aho-corasick-ts
 ```
 
-Node.js 18 or newer, checked on every release from 18.0.0 up. Ships ESM with type declarations. There is no CJS build, but `require(ESM)` reaches it from Node 20 onwards — Node 22 prints an `ExperimentalWarning` when it does, Node 24 and newer do not. It has no runtime dependencies and uses no Node-specific API, so it also works as ESM in the browser — though browser performance has not been measured.
+Node.js 18 or newer, checked on every release from 18.0.0 up. Ships both ESM and CommonJS with type declarations for each, so `import` and `require` both work, Node 18 included. Loading it both ways in one process gives you two separate copies of the class, which matters only if you compare instances across them. It has no runtime dependencies and uses no Node-specific API, so it also works as ESM in the browser — though browser performance has not been measured.
 
 ## Quick start
 
