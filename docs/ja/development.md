@@ -3,7 +3,7 @@
 このパッケージを開発するための情報です。English: [../en/development.md](../en/development.md)。
 
 
-Node.js 22.12以降。pnpm・TypeScript・Biomeのバージョンは`package.json`に固定してあり、ここに数字を書き写すとRenovateの更新で古くなるため記載しません。
+このパッケージの開発にはNode.js 22.12以降が必要です（テストランナーのカバレッジ計測と型ストリッピングが要求するためで、パッケージ自体は18で動きます）。pnpm・TypeScript・Biomeのバージョンは`package.json`に固定してあり、ここに数字を書き写すとRenovateの更新で古くなるため記載しません。
 
 ```sh
 pnpm install --frozen-lockfile
