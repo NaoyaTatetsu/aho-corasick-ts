@@ -5,6 +5,8 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+## 1.1.0 — 2026-09-15
+
 ### Added
 
 - A CommonJS build alongside the ESM one, with type declarations for each. `require` now works from
