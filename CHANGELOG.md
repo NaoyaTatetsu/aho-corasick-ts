@@ -11,6 +11,12 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
   needs, which is a feature rather than a requirement — as ESM the package always ran on 18.
   Verified on 18.0.0 itself, and a smoke test now runs on 18 and 20 in CI so the claim stays
   checked. `require(ESM)` reaches it from Node 20 onwards.
+- More keywords, chosen from what npm search actually returns rather than from guesswork.
+  `ahocorasick` unhyphenated, because npm treats it as a separate term and the most downloaded
+  package in this space carries it; `ngword` and `ng-word`, a niche with two results in total that
+  `example/ng-words.ts` shows the package serving; and `trie`, `keyword`, `highlight`,
+  `string-match` and `text-search`. Nothing describing a feature the package does not have —
+  `profanity` was left out, since no word list ships with it.
 
 ## 1.0.0 — 2026-09-14
 
