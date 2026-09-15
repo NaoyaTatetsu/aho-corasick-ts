@@ -5,6 +5,13 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+### Added
+
+- A CommonJS build alongside the ESM one, with type declarations for each. `require` now works from
+  Node 18, where `require(ESM)` does not exist, and a TypeScript project on `module: node16` — which
+  used to fail with TS1479 — resolves the types. Loading both halves in one process yields two
+  copies of the class, which matters only where instances are compared across them.
+
 ### Changed
 
 - The supported Node floor drops from 22.12 to 18. The old floor was the version `require(ESM)`

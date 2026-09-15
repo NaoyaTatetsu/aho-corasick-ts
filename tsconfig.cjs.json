@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    // node16 resolution refuses to pair with module: commonjs, and node10 is gone in
+    // TypeScript 7. bundler resolves this package's own imports, of which there are none.
+    "moduleResolution": "bundler",
+    // Emitting CommonJS means rewriting import syntax, which verbatimModuleSyntax forbids.
+    "verbatimModuleSyntax": false,
+    "outDir": "dist/cjs"
+  }
+}

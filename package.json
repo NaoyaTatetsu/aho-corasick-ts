@@ -19,11 +19,18 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
     },
     "./package.json": "./package.json"
   },
+  "main": "./dist/cjs/index.js",
   "files": [
     "dist",
     "src"
@@ -34,11 +41,11 @@
   },
   "packageManager": "pnpm@12.4.0",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && node .github/scripts/build-cjs.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p example/tsconfig.json",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "test": "pnpm build && node --test test/*.test.mjs",
+    "test": "pnpm build && node --test test/*.test.mjs && node .github/scripts/smoke.cjs",
     "coverage": "pnpm build && node --test --experimental-test-coverage --test-coverage-include='dist/**' test/*.test.mjs",
     "benchmark": "pnpm build && node benchmark/run.mjs",
     "example": "pnpm build && for f in example/*.ts; do echo \"--- $f ---\"; node --experimental-strip-types \"$f\"; done",
