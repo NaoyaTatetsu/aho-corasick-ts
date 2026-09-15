@@ -5,6 +5,8 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+## 1.1.0 — 2026-09-15
+
 ### Changed
 
 - The supported Node floor drops from 22.12 to 18. The old floor was the version `require(ESM)`
