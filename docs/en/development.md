@@ -2,7 +2,7 @@
 
 Japanese readers can find all of this in [../ja/development.md](../ja/development.md).
 
-Node.js 22.12 or newer. The pnpm, TypeScript and Biome versions are pinned in `package.json`, so they are whatever Renovate last landed rather than numbers repeated here.
+Node.js 22.12 or newer to work on this package — the test runner's coverage and type stripping need it, even though the package itself runs on 18. The pnpm, TypeScript and Biome versions are pinned in `package.json`, so they are whatever Renovate last landed rather than numbers repeated here.
 
 ```sh
 pnpm install --frozen-lockfile

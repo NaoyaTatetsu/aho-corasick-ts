@@ -5,6 +5,13 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+### Changed
+
+- The supported Node floor drops from 22.12 to 18. The old floor was the version `require(ESM)`
+  needs, which is a feature rather than a requirement — as ESM the package always ran on 18.
+  Verified on 18.0.0 itself, and a smoke test now runs on 18 and 20 in CI so the claim stays
+  checked. `require(ESM)` reaches it from Node 20 onwards.
+
 ## 1.0.0 — 2026-09-14
 
 The public API is settled: from here, anything that breaks it needs a major version.
