@@ -54,7 +54,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "2.5.13",
+    "@biomejs/biome": "2.5.14",
     "@monyone/aho-corasick": "^1.0.0",
     "@stll/aho-corasick": "1.0.4",
     "@types/node": "26.6.2",

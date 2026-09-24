@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.13/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
   "files": {
     // benchmark/baseline.* is a frozen snapshot of a past src/index.ts, kept byte-for-byte
     // so `pnpm benchmark --compare` measures the same code it always did. Marked "Do not edit".
