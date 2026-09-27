@@ -182,8 +182,8 @@ importers:
         specifier: 1.0.2
         version: 1.0.2
       modern-ahocorasick:
-        specifier: 2.0.4
-        version: 2.0.4
+        specifier: 3.3.0
+        version: 3.3.0
       typescript:
         specifier: 7.0.2
         version: 7.0.2
@@ -436,8 +436,8 @@ packages:
   ahocorasick@1.0.2:
     resolution: {integrity: sha512-hCOfMzbFx5IDutmWLAt6MZwOUjIfSM9G9FyVxytmE4Rs/5YDPWQrD/+IR1w+FweD9H2oOZEnv36TmkjhNURBVA==}
 
-  modern-ahocorasick@2.0.4:
-    resolution: {integrity: sha512-EFe312CXjDE8/nXOJk/LpzPUTNXzFTZCWazQ6rntodIByicqKg9wSqjBSQt1alcTdzwEbMyeTPXnvw9BIxyiRg==}
+  modern-ahocorasick@3.3.0:
+    resolution: {integrity: sha512-OEuPxzKD4fG8Zx2dUX8jDP7ArNhRdlHhjLA00k+ZmtXe49Qb6+E/M/ViDYnXOZ9A3uRbRIb1eTKPesQGKd0USA==}
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
@@ -618,7 +618,7 @@ snapshots:
 
   ahocorasick@1.0.2: {}
 
-  modern-ahocorasick@2.0.4: {}
+  modern-ahocorasick@3.3.0: {}
 
   tslib@2.8.1:
     optional: true
