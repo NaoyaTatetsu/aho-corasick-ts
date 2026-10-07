@@ -38,7 +38,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "pnpm@12.6.0",
+  "packageManager": "pnpm@12.9.1",
   "scripts": {
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.cjs.json && node .github/scripts/build-cjs.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p example/tsconfig.json",
@@ -53,10 +53,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@biomejs/biome": "2.5.13",
+    "@biomejs/biome": "2.5.15",
     "@monyone/aho-corasick": "^1.0.0",
     "@stll/aho-corasick": "1.0.4",
-    "@types/node": "26.6.2",
+    "@types/node": "26.6.4",
     "ahocorasick": "1.0.2",
     "modern-ahocorasick": "3.3.0",
     "typescript": "7.0.2"
