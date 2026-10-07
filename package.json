@@ -1,6 +1,6 @@
 {
   "name": "@naoya_tatetsu/aho-corasick-ts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Fast, dependency-free Aho-Corasick matching with adaptive typed-array transitions",
   "author": "Naoya Tatetsu",
   "repository": {
@@ -15,7 +15,7 @@
     "access": "public"
   },
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
@@ -30,7 +30,6 @@
     },
     "./package.json": "./package.json"
   },
-  "main": "./dist/cjs/index.js",
   "files": [
     "dist",
     "src"

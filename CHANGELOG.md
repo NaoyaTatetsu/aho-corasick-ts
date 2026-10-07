@@ -5,6 +5,14 @@ and the version numbers follow [Semantic Versioning](https://semver.org/spec/v2.
 
 ## Unreleased
 
+## 1.1.1 — 2026-10-07
+
+### Changed
+
+- No change to the library itself: the published `src` and `dist` are the same as 1.1.0. Only
+  development tooling moved — pnpm to 12.9.1, `@types/node` to 26.6.4, Biome to 2.5.15, and
+  `modern-ahocorasick`, one of the libraries the benchmark compares against, to v3.
+
 ## 1.1.0 — 2026-09-15
 
 ### Added
