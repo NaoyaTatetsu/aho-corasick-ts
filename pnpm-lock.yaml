@@ -171,10 +171,10 @@ importers:
         version: 2.5.15
       '@monyone/aho-corasick':
         specifier: ^1.0.0
-        version: 1.5.10
+        version: 1.5.11
       '@stll/aho-corasick':
-        specifier: 1.0.4
-        version: 1.0.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
+        specifier: 1.1.1
+        version: 1.1.1
       '@types/node':
         specifier: 26.6.5
         version: 26.6.5
@@ -247,65 +247,65 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@emnapi/core@1.11.3':
-    resolution: {integrity: sha512-zLpS5asjEb7lq8jYLq37N6XKaE41DIexlY1rF/z4/tIl3wo13Sqm28fRyfIsKZD+NZ8mM5RoKkpW/rBcuoSZSg==}
+  '@emnapi/core@2.0.0-alpha.3':
+    resolution: {integrity: sha512-AZypUeJ/yByuxyS7BlSNRDOMLMlROYtjYdIAuBmJssVz1UJDSeYxLrdizhXCFYhedC5bqd/ASy8EuNXbVVXp9g==}
 
-  '@emnapi/runtime@1.11.3':
-    resolution: {integrity: sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==}
+  '@emnapi/runtime@2.0.0-alpha.3':
+    resolution: {integrity: sha512-hFPAhMUjJD9BSyCANEISPOogeXC9Zo9ZQl7L6vKnaVsMkCtzznaW/naYypeyl0Gv5rYfWYsZbpixTMpjDJzQeA==}
 
-  '@emnapi/wasi-threads@1.2.3':
-    resolution: {integrity: sha512-ELEBe8PsLvvJ6QMr0zLt8ffvOHW/dc1m3CEzNMg7aJUv3bMaoDtw2TXyDAwkYBuroxxuHEwhRTLJSe5sya547g==}
+  '@emnapi/wasi-threads@2.0.1':
+    resolution: {integrity: sha512-9DsSk+o5NBX0CCJT8s0EROGSGxjR/tKu6aBTaVyq+SjAEQH4XcdcRxPBRzsBLizTTJ49MJjF+jgu3qnO9GLQcQ==}
 
-  '@monyone/aho-corasick@1.5.10':
-    resolution: {integrity: sha512-JZTI4b/OYa8TbXH3FToIyL4QGcgJ0C80eIgsigDCYCP474wydo6byR2k1m8y37mY4i11U0L46L2A564NZVzxOA==}
+  '@monyone/aho-corasick@1.5.11':
+    resolution: {integrity: sha512-dC6Dm+5Q3TZJQz3PMVA7FkBREAlYrG16tdd2ULaZSvLD5y0t2HFV8wZmtiMpn6L0CpZTNVtdx/ysD4baE9hTrQ==}
 
-  '@napi-rs/wasm-runtime@1.2.3':
-    resolution: {integrity: sha512-UMduMbqO5s5zF2NkNacMT/yK5Y5QiKvWr2+50bzIIxFDwVJ2h49b+oyjaCGPhJxd2/gC2x39EHv/gHVuu36x2Q==}
+  '@napi-rs/wasm-runtime@1.2.2':
+    resolution: {integrity: sha512-JfB4kuJQjaoHuCTseIINHtHWeJnvgEcxjwA5t/Y00ZgaOO1Crz3fjT/p8kT28zA/Caz7oiUMn3d6H2yOVCVwuw==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=23.5.0}
     peerDependencies:
-      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.4
-      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.4
+      '@emnapi/core': ^1.7.1 || ^2.0.0-alpha.3
+      '@emnapi/runtime': ^1.7.1 || ^2.0.0-alpha.3
 
-  '@stll/aho-corasick-darwin-arm64@1.0.4':
-    resolution: {integrity: sha512-PGyqaKlzqg4sJqySWnqSt4Cj3PyBxwDu7a2eDyYth47ZIcCt9NyYYU7EsHQZj+rVbHlOqmmcmuCu7kwF7eBndg==}
+  '@stll/aho-corasick-darwin-arm64@1.1.1':
+    resolution: {integrity: sha512-kVywB/PFMb8M4Ww52r/gRjHbHaWaUFHVUbfjFZCpGcrhNox9jWH89ekZlm/TWTpvcfU7txkc5fbGKMM74D20/Q==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [darwin]
 
-  '@stll/aho-corasick-darwin-x64@1.0.4':
-    resolution: {integrity: sha512-g5evE47d9TUUlaWSFUemqDuBR3Sx82gK9LA658POSmQoGDb0BIQ+pAZsm3fZM19rJ1dlCken+c8j4IHzemfv0Q==}
+  '@stll/aho-corasick-darwin-x64@1.1.1':
+    resolution: {integrity: sha512-ra+ARch/3vy3H22LQ8C45DHHFhnCll/tcA2nn2WwNix3WleD/1eE/ivhwaORq9TsP9Trjf4T8Q/AL7CIA0ViCw==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [darwin]
 
-  '@stll/aho-corasick-linux-arm64-gnu@1.0.4':
-    resolution: {integrity: sha512-X6QppNV1UCrvxEAtasMClNEVMKEXIdD3t6lhakeQrSbFWWM8xRuMYoKFqeQLxYeCv2svwQFQUdSDF50CjlRYGA==}
+  '@stll/aho-corasick-linux-arm64-gnu@1.1.1':
+    resolution: {integrity: sha512-Jx8lIu1BgZo55XXIldABq/GFMr7e+EJZUMu1djCGXQy7XUkD2itWIpM/CNzXDV5qENyg27rLubcUj3GMaMf2mQ==}
     engines: {node: '>= 18'}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@stll/aho-corasick-linux-x64-gnu@1.0.4':
-    resolution: {integrity: sha512-7tRAKkxN4DGSVR7bweWlHsfisXoI+k/vrEMloYM2zc2iYLmNipeHOApbsX53WCBAjTGbjGcPQgf+JqqFyyp28A==}
+  '@stll/aho-corasick-linux-x64-gnu@1.1.1':
+    resolution: {integrity: sha512-ju1Zx3LXHuDa5Tce+0uOINjFjpgqm0sMiT7dXx4V4ksC+jZlapYscqTjgTtIj86ZgsYIhv5Ne7LW9+2+98vyuQ==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@stll/aho-corasick-wasm32-wasi@1.0.4':
-    resolution: {integrity: sha512-p8ZEK02oT+PPN9CXqSb215aIvvNQ9ZQn+vfFXwzDcpsKxYjBoh8tuXwvK4km7U3HrgA02uPuPwrrtUB+HjiXsA==}
+  '@stll/aho-corasick-wasm32-wasi@1.1.1':
+    resolution: {integrity: sha512-JGbxnHf3kZlO0Z6Gnf5N/163pYw530NxLvgyzdjWShrT8d7YEdvk1COSqTiZBNrTzaZ2VA6JzhPH/9guKRZMGw==}
     engines: {node: '>= 18'}
     cpu: [wasm32]
 
-  '@stll/aho-corasick-win32-x64-msvc@1.0.4':
-    resolution: {integrity: sha512-GmRM/fwKqX8+Gx7oGp9ZUnteb5iBx5fz2xu91Oe33RSFW9CJjZJgilOvNnNaRU9mGQu32UGam0RKTPne6OcCHw==}
+  '@stll/aho-corasick-win32-x64-msvc@1.1.1':
+    resolution: {integrity: sha512-9z64lqzP6++EMhp9hs6hMiWIqa8blIVysQQZCz5xM/SsNRwRQ/oajm4OeBXb+d1Xd0Cw6sf/l5VnmfbJCRTpWA==}
     engines: {node: '>= 18'}
     cpu: [x64]
     os: [win32]
 
-  '@stll/aho-corasick@1.0.4':
-    resolution: {integrity: sha512-TY1CgNtWGLCTa/JnTHYlkAFA/1t4Y0DOJejAFyLuf4CDL+ZeExG17iZFH+PTDEX8zzxWmTXkE7VMPRpNV4ZVoA==}
-    engines: {node: '>= 18'}
+  '@stll/aho-corasick@1.1.1':
+    resolution: {integrity: sha512-ewTfi1VGqyrI9M6S/nfnBC/6yNOPiVHAvNyuaIY+UMibvveiEZa41Lm32luPin+HGcA0LvwfbiAXcRrqmwirOg==}
+    engines: {bun: '>=1.4.1', node: '>= 18'}
 
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
@@ -487,65 +487,61 @@ snapshots:
   '@biomejs/cli-win32-x64@2.5.15':
     optional: true
 
-  '@emnapi/core@1.11.3':
+  '@emnapi/core@2.0.0-alpha.3':
     dependencies:
-      '@emnapi/wasi-threads': 1.2.3
+      '@emnapi/wasi-threads': 2.0.1
       tslib: 2.8.1
     optional: true
 
-  '@emnapi/runtime@1.11.3':
-    dependencies:
-      tslib: 2.8.1
-    optional: true
-
-  '@emnapi/wasi-threads@1.2.3':
+  '@emnapi/runtime@2.0.0-alpha.3':
     dependencies:
       tslib: 2.8.1
     optional: true
 
-  '@monyone/aho-corasick@1.5.10': {}
-
-  '@napi-rs/wasm-runtime@1.2.3(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)':
+  '@emnapi/wasi-threads@2.0.1':
     dependencies:
-      '@emnapi/core': 1.11.3
-      '@emnapi/runtime': 1.11.3
+      tslib: 2.8.1
+    optional: true
+
+  '@monyone/aho-corasick@1.5.11': {}
+
+  '@napi-rs/wasm-runtime@1.2.2(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)':
+    dependencies:
+      '@emnapi/core': 2.0.0-alpha.3
+      '@emnapi/runtime': 2.0.0-alpha.3
       '@tybys/wasm-util': 0.10.3
     optional: true
 
-  '@stll/aho-corasick-darwin-arm64@1.0.4':
+  '@stll/aho-corasick-darwin-arm64@1.1.1':
     optional: true
 
-  '@stll/aho-corasick-darwin-x64@1.0.4':
+  '@stll/aho-corasick-darwin-x64@1.1.1':
     optional: true
 
-  '@stll/aho-corasick-linux-arm64-gnu@1.0.4':
+  '@stll/aho-corasick-linux-arm64-gnu@1.1.1':
     optional: true
 
-  '@stll/aho-corasick-linux-x64-gnu@1.0.4':
+  '@stll/aho-corasick-linux-x64-gnu@1.1.1':
     optional: true
 
-  '@stll/aho-corasick-wasm32-wasi@1.0.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)':
+  '@stll/aho-corasick-wasm32-wasi@1.1.1':
     dependencies:
-      '@napi-rs/wasm-runtime': 1.2.3(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
+      '@emnapi/core': 2.0.0-alpha.3
+      '@emnapi/runtime': 2.0.0-alpha.3
+      '@napi-rs/wasm-runtime': 1.2.2(@emnapi/core@2.0.0-alpha.3)(@emnapi/runtime@2.0.0-alpha.3)
     optional: true
 
-  '@stll/aho-corasick-win32-x64-msvc@1.0.4':
+  '@stll/aho-corasick-win32-x64-msvc@1.1.1':
     optional: true
 
-  '@stll/aho-corasick@1.0.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)':
+  '@stll/aho-corasick@1.1.1':
     optionalDependencies:
-      '@stll/aho-corasick-darwin-arm64': 1.0.4
-      '@stll/aho-corasick-darwin-x64': 1.0.4
-      '@stll/aho-corasick-linux-arm64-gnu': 1.0.4
-      '@stll/aho-corasick-linux-x64-gnu': 1.0.4
-      '@stll/aho-corasick-wasm32-wasi': 1.0.4(@emnapi/core@1.11.3)(@emnapi/runtime@1.11.3)
-      '@stll/aho-corasick-win32-x64-msvc': 1.0.4
-    transitivePeerDependencies:
-      - '@emnapi/core'
-      - '@emnapi/runtime'
+      '@stll/aho-corasick-darwin-arm64': 1.1.1
+      '@stll/aho-corasick-darwin-x64': 1.1.1
+      '@stll/aho-corasick-linux-arm64-gnu': 1.1.1
+      '@stll/aho-corasick-linux-x64-gnu': 1.1.1
+      '@stll/aho-corasick-wasm32-wasi': 1.1.1
+      '@stll/aho-corasick-win32-x64-msvc': 1.1.1
 
   '@tybys/wasm-util@0.10.3':
     dependencies:
