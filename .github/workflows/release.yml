@@ -22,7 +22,7 @@ jobs:
           # Node 24 carries npm 11.19, past the 11.5.1 that trusted publishing needs.
           # registry-url is deliberately unset: it writes an .npmrc expecting NODE_AUTH_TOKEN,
           # and there is no token here.
-          node-version: 24
+          node-version: 26
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       # Refuses a version that went backwards, skipped a step, or has no changelog entry,
